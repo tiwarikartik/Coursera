@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const socket = io.connect();
+    const socket = io.connect('https://chat-application-rs6t.onrender.com/');
     let room;
 
     // Displaying Received Messages
