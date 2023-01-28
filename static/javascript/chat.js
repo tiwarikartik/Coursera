@@ -3,19 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let room;
 
     // Displaying Received Messages
-    socket.on("message", (data) => {
-        console.log(data);
-        const messages = document.querySelector("#display-messages");
-        const template = document.querySelector("#chat");
-        const content = template.content.cloneNode(true);
-
-        content.querySelector("#user").append(data.username);
-        content.querySelector("#time").append(data.timestamp);
-        content.querySelector("#message").append(data.msg);
-
-        messages.append(content);
-    });
-
     socket.on("secret", (data) => {
         console.log(data);
         const messages = document.querySelector("#display-messages");

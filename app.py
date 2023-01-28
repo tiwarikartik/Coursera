@@ -14,13 +14,15 @@ from flask_login import (
 
 # Configure Application
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY")
+app.secret_key = "2lYBuvhkX6Z1iP8IZ8n7"  # os.environ.get("SECRET_KEY")
 
 # Configure Database
 app.app_context().push()
 app.config["SQLALCHEMY_ECHO"] = True
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
+app.config[
+    "SQLALCHEMY_DATABASE_URI"
+] = "postgresql://chatapp_gamm_user:veUjJBD1aGAfgVFRHMHEhn0Bp0g2FLCv@dpg-cf415q6n6mps0qn9faug-a.oregon-postgres.render.com/chatapp_gamm"  # os.environ.get("DATABASE_URL")
 
 db = SQLAlchemy(app)
 from models.Users import Users
