@@ -29,11 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
         messages.append(content);
     });
 
-    socket.on("left", (data) => {
-        printSysMsg(data.msg);
-    });
-
-    socket.on("joined", (data) => {
+    socket.on("info", (data) => {
         printSysMsg(data.msg);
     });
 

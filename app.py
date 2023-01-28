@@ -118,7 +118,7 @@ def join(data):
     username = data["username"]
     room = data["room"]
     join_room(room)
-    emit("joined", {"msg": f"{username} has joined the {room} room."}, to=room)
+    emit("info", {"msg": f"{username} has joined the {room} room."}, to=room)
 
 
 @socketio.on("leave")
@@ -126,7 +126,7 @@ def leave(data):
     username = data["username"]
     room = data["room"]
     leave_room(room)
-    emit("left", {"msg": f"{username} has left the {room} room."}, to=room)
+    emit("info", {"msg": f"{username} has left the {room} room."}, to=room)
 
 
 if __name__ == "__main__":
