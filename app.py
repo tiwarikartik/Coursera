@@ -1,5 +1,7 @@
+from time import localtime, strftime
 from flask import Flask, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from flask_socketio import SocketIO, send, emit, join_room, leave_room, rooms
 from wtf_fields import *
 from flask_login import (
     LoginManager,
@@ -24,6 +26,10 @@ app.config[
 db = SQLAlchemy(app)
 from models.Users import Users
 
+# Initialize Flask-SocketIO
+socketio = SocketIO(app)
+ROOMS = ["Events", "Fees", "Parents", "Teachers", "Dabbawalas"]
+
 # Configue flask Login
 login = LoginManager(app)
 login.init_app(app)
@@ -34,18 +40,9 @@ def load_user(id):
     return Users.query.get(int(id))
 
 
-# Home Page Route
+# Register Page Route
 @app.route("/", methods=["GET", "POST"])
 def index():
-    if current_user.is_authenticated:
-        return redirect(url_for("chat"))
-    else:
-        return redirect(url_for("login"))
-
-
-# Register Page Route
-@app.route("/register", methods=["GET", "POST"])
-def register():
     reg_form = Registration()
 
     # Updated database if validation success
@@ -62,8 +59,6 @@ def register():
         user = Users(username=uid, password=password)
         db.session.add(user)
         db.session.commit()
-
-        flash("Registered Successfully. Please Login", "success")
         if current_user.is_authenticated:
             return redirect(url_for("chat"))
         else:
@@ -91,7 +86,8 @@ def chat():
     if not current_user.is_authenticated:
         flash("Please login", "danger")
         return redirect(url_for("login"))
-    return "Chat with me"
+
+    return render_template("chat.html", username=current_user.username, rooms=ROOMS)
 
 
 @app.route("/logout", methods=["GET"])
@@ -101,5 +97,37 @@ def logout():
     return redirect(url_for("login"))
 
 
+@socketio.on("message")
+def message(data):
+    print(f"\n{data}\n")
+    room = data["room"]
+    emit(
+        "secret",
+        {
+            "msg": data["msg"],
+            "username": data["username"],
+            "room": room,
+            "timestamp": strftime("%b-%d %I:%M%p", localtime()),
+        },
+        to=room,
+    )
+
+
+@socketio.on("join")
+def join(data):
+    username = data["username"]
+    room = data["room"]
+    join_room(room)
+    emit("joined", {"msg": f"{username} has joined the {room} room."}, to=room)
+
+
+@socketio.on("leave")
+def leave(data):
+    username = data["username"]
+    room = data["room"]
+    leave_room(room)
+    emit("left", {"msg": f"{username} has left the {room} room."}, to=room)
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app)
