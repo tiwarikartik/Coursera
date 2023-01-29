@@ -11,15 +11,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
         integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
         crossorigin="anonymous"></script>
-
-    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/chat.js') }}"
-        defer></script>
+    
+    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/chat.js') }}" defer></script>
+    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/search.js')}}" defer></script>
 </head>
 <body>
     <nav></nav>
     <div id="main-section">
         {# Room Selection #}
         <nav id="sidebar">
+            <div class="search-wrapper">
+                <label for="search">Search Users</label>
+                <input type="search" id="search" data-search/>
+
+                <div data-user-card-container>
+                </div>
+            </div>
             {% for room in rooms %}
                 <p class="select-room">{{ room|title }}</p>
             {% endfor %}
@@ -29,7 +36,7 @@
         <div id="rightside-panel">
             <div id="display-messages">
             </div>
-
+            
             {# Input Message #}
             <div id="input-area">
                 <input type="text" id="user-message" placeholder="Type Messages here ...." autocomplete="off">
@@ -43,6 +50,14 @@
         <p id="user"></p>
         <h1 id="message"></h1>
         <p id="time"></p>
+    </template>
+
+    {# Search Cards #}
+    <template data-card-template>
+        <div class="card">
+            <div class="header" data-header></div>
+            <div class="body" data-body></div>
+        </div>
     </template>
 
     {# Get Username #}

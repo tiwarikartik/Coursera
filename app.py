@@ -1,4 +1,4 @@
-import os
+import os, json
 from time import localtime, strftime
 from flask import Flask, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
@@ -22,14 +22,14 @@ app.config["SQLALCHEMY_ECHO"] = True
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = "postgresql://chatapp_gamm_user:veUjJBD1aGAfgVFRHMHEhn0Bp0g2FLCv@dpg-cf415q6n6mps0qn9faug-a.oregon-postgres.render.com/chatapp_gamm"  # os.environ.get("DATABASE_URL")
+] = "postgresql://practicedb_j9l4_user:5BMCGCDq8PYDjKrt10E17HZsLf6MrWZy@dpg-cfag8hhgp3jsh6f4ost0-a.oregon-postgres.render.com/practicedb_j9l4"  # os.environ.get("DATABASE_URL")
 
 db = SQLAlchemy(app)
-from models.Users import Users
+from models.Users import Users, Duo, user_duo
 
 # Initialize Flask-SocketIO
 socketio = SocketIO(app)
-ROOMS = ["Events", "Fees", "Parents", "Teachers", "Dabbawalas"]
+ROOMS = []
 
 # Configue flask Login
 login = LoginManager(app)
@@ -52,12 +52,13 @@ def index():
         # Fetch Uid and Password
         uid = reg_form.username.data
         pas = reg_form.password.data
+        email = reg_form.email.data
 
         # Hash passwords
         password = pbkdf2_sha512.hash(pas)
 
         # Insert User to Database
-        user = Users(username=uid, password=password)
+        user = Users(username=uid, password=password, email=email)
         db.session.add(user)
         db.session.commit()
         if current_user.is_authenticated:
@@ -88,6 +89,14 @@ def chat():
         flash("Please login", "danger")
         return redirect(url_for("login"))
 
+    starts = [
+        i.name
+        for i in Duo.query.filter(Duo.name.startswith(current_user.username)).all()
+    ]
+    ends = [
+        i.name for i in Duo.query.filter(Duo.name.endswith(current_user.username)).all()
+    ]
+    ROOMS = starts + ends
     return render_template("chat.html", username=current_user.username, rooms=ROOMS)
 
 
@@ -96,6 +105,42 @@ def logout():
     logout_user()
     flash("You have been logged out", "success")
     return redirect(url_for("login"))
+
+
+@app.route("/api/<limit>", methods=["GET"])
+def get_users(limit):
+    users = Users.query.all()[: int(limit)]
+    arr = []
+    for user in users:
+        arr.append({"username": user.username, "email": user.email})
+    return json.dumps(arr)
+
+
+@socketio.on("room")
+def createRoom(data):
+    requestor = data["requestor"]
+    receiver = data["receiver"]
+
+    user1 = Users.query.filter_by(username=requestor).first()
+    user2 = Users.query.filter_by(username=receiver).first()
+
+    roomName = f"{requestor} x {receiver}"
+    room = (
+        Duo.query.filter_by(name=roomName).first()
+        or Duo.query.filter_by(name=f"{receiver} x {requestor}").first()
+    )
+
+    if room == None:
+        newRoom = Duo(name=roomName)
+        db.session.add(newRoom)
+        user1.chats.append(newRoom)
+        user2.chats.append(newRoom)
+        db.session.commit()
+    join_room(roomName)
+    ROOMS = [i.name for i in Duo.query.all()]
+    # newRoom = Duo(name=f"{user1} x {user2}")
+    # user
+    # join_room(user1)
 
 
 @socketio.on("message")

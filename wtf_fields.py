@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, EqualTo, ValidationError
+from wtforms.validators import InputRequired, Length, EqualTo, Email, ValidationError
 from passlib.hash import pbkdf2_sha512
 
 
@@ -46,6 +46,14 @@ class Registration(FlaskForm):
                 min=4, max=25, message="Username must be between 4 and 25 characters"
             ),
             EqualTo("password", message="Passwords must match"),
+        ],
+    )
+    email = StringField(
+        "email_address_label",
+        validators=[
+            InputRequired(message="Email ID required"),
+            Length(min=5, max=25, message="Email must be between 4 and 25 characters"),
+            Email(message="This field requires a valid email address"),
         ],
     )
     submit_button = SubmitField("Create")
