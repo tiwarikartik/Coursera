@@ -25,7 +25,11 @@ socket.on("createRoom", (data) => {});
 document.querySelector("#send-message").onclick = () => {
     if (room) {
         const input = document.querySelector("#user-message");
-        let json = { msg: input.value, username: username, room: room };
+        let json = {
+            msg: input.value,
+            username: username,
+            room: room.toLowerCase(),
+        };
         socket.send(json);
         input.value = "";
     }
@@ -42,6 +46,10 @@ document.querySelectorAll(".select-room").forEach((p) => {
             leaveRoom(room);
             joinRoom(newRoom);
             room = newRoom;
+            socket.emit("history", {
+                user: username,
+                room: room.toLowerCase(),
+            });
             console.log(room);
         }
     };

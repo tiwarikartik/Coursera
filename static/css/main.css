@@ -45,15 +45,17 @@ input {
 }
 
 #rightside-panel {
-    width: 100%;
+    width: 98%;
+    height: 98%;
 }
 
 #display-messages {
-    height: 90vh;
+    height: 95vh;
+    overflow-y: scroll;
 }
 
 #input-area {
-    display:fixed grid;
+    display: fixed grid;
     height: 50px;
     grid-column: 1fr auto;
 }

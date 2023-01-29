@@ -1,5 +1,6 @@
 import os, json
 from time import localtime, strftime
+from datetime import datetime
 from flask import Flask, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO, send, emit, join_room, leave_room, rooms
@@ -22,10 +23,10 @@ app.config["SQLALCHEMY_ECHO"] = True
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = "postgresql://practicedb_j9l4_user:5BMCGCDq8PYDjKrt10E17HZsLf6MrWZy@dpg-cfag8hhgp3jsh6f4ost0-a.oregon-postgres.render.com/practicedb_j9l4"  # os.environ.get("DATABASE_URL")
+] = "postgresql://chatapp_gamm_user:veUjJBD1aGAfgVFRHMHEhn0Bp0g2FLCv@dpg-cf415q6n6mps0qn9faug-a.oregon-postgres.render.com/chatapp_gamm"  # os.environ.get("DATABASE_URL")
 
 db = SQLAlchemy(app)
-from models.Users import Users, Duo, user_duo
+from models.Users import Users, Duo, user_duo, History
 
 # Initialize Flask-SocketIO
 socketio = SocketIO(app)
@@ -146,17 +147,37 @@ def createRoom(data):
 @socketio.on("message")
 def message(data):
     print(f"\n{data}\n")
-    room = data["room"]
+    room = Duo.query.filter_by(name=data["room"]).first()
+    user = Users.query.filter_by(username=data["username"]).first()
+    message = data["msg"]
+    timestamp = strftime("%d %b %Y %I:%M %p", localtime())
+
+    savemessage = History(
+        message=message,
+        send_by=user.id,
+        sent_in=room.id,
+        send_on=datetime.strptime(timestamp, "%d %b %Y %I:%M %p"),
+    )
+    print(room.name.title())
+    db.session.add(savemessage)
+    db.session.commit()
+
     emit(
         "secret",
         {
-            "msg": data["msg"],
-            "username": data["username"],
-            "room": room,
-            "timestamp": strftime("%b-%d %I:%M%p", localtime()),
+            "msg": message,
+            "username": user.username,
+            "room": room.name.title(),
+            "timestamp": timestamp,
         },
-        to=room,
+        to=room.name.title(),
     )
+
+
+@socketio.on("history")
+def getHistory(data):
+    room = Duo.query.filter_by(name=data["room"]).first()
+    user = Users.query.filter_by(username=data["user"]).first()
 
 
 @socketio.on("join")
