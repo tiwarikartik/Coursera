@@ -15,6 +15,22 @@ socket.on("secret", (data) => {
     messages.append(content);
 });
 
+socket.on("pastmessages", (json) => {
+    console.log(json);
+    document.querySelector("#display-messages").innerHTML = "";
+    json.forEach((data) => {
+        const messages = document.querySelector("#display-messages");
+        const template = document.querySelector("#chat");
+        const content = template.content.cloneNode(true);
+
+        content.querySelector("#user").append(data.username);
+        content.querySelector("#time").append(data.timestamp);
+        content.querySelector("#message").append(data.message);
+
+        messages.append(content);
+    });
+});
+
 socket.on("info", (data) => {
     printSysMsg(data.msg);
 });
@@ -43,7 +59,9 @@ document.querySelectorAll(".select-room").forEach((p) => {
             msg = `You are already in ${room} room.`;
             printSysMsg(msg);
         } else {
-            leaveRoom(room);
+            if (room) {
+                leaveRoom(room);
+            }
             joinRoom(newRoom);
             room = newRoom;
             socket.emit("history", {

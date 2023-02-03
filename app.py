@@ -176,8 +176,30 @@ def message(data):
 
 @socketio.on("history")
 def getHistory(data):
-    room = Duo.query.filter_by(name=data["room"]).first()
-    user = Users.query.filter_by(username=data["user"]).first()
+    room = data["room"]
+    user = data["user"]
+
+    alls = (
+        db.session.query(History, Users, Duo)
+        .join(Users)
+        .join(Duo)
+        .filter(Duo.name == room)
+        .all()
+    )
+
+    array = []
+    for history, user, duo in alls:
+        datetime = history.send_on
+        array.append(
+            {
+                "message": history.message,
+                "username": user.username,
+                "timestamp": datetime.strftime("%d %b %Y %I:%M %p"),
+                "room": duo.name,
+            }
+        )
+    print(array)
+    emit("pastmessages", array, to=room.title())
 
 
 @socketio.on("join")
