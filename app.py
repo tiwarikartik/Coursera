@@ -218,5 +218,20 @@ def leave(data):
     emit("info", {"msg": f"{username} has left the {room} room."}, to=room)
 
 
+@socketio.on("audio-data")
+def handle_audio_data(data):
+    room = data["room"]
+    info = {
+        "audio_data": data["audio_data"],
+        "sender": data["sender"],
+        "room": room,
+    }
+    emit(
+        "audioBlob",
+        info,
+        to=room.title(),
+    )
+
+
 if __name__ == "__main__":
     socketio.run(app)

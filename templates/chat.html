@@ -13,7 +13,9 @@
         crossorigin="anonymous"></script>
     
     <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/chat.js') }}" defer></script>
+    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/rooms.js')}}" defer></script>
     <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/search.js')}}" defer></script>
+    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/audio.js')}}" defer></script>
 </head>
 <body>
     <nav></nav>
@@ -40,16 +42,27 @@
             {# Input Message #}
             <div id="input-area">
                 <input type="text" id="user-message" placeholder="Type Messages here ...." autocomplete="off">
-                <button type="button" id="send-message">SEND</button>
+                <button type="button" id="send-message">send</button>
+                <button type="button" id="stop">stop</button>
+                <button type="button" id="record">record</button>
             </div>
         </div>
     </div>
 
-
+    {# Chats Templates #}
     <template id='chat'>
         <p id="user"></p>
         <h1 id="message"></h1>
         <p id="time"></p>
+    </template>
+
+    {# Audio Templates #}
+    <template data-audio-template>
+        <article id="container">
+            <p id="clipName"></p>
+            <audio id="audio" src="" controls></audio>
+            <button id="delete">Delete</button>
+        </article>
     </template>
 
     {# Search Cards #}
