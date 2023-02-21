@@ -1,11 +1,37 @@
-.search-wrapper {
-    display:flex;
-    flex-direction: column;
-    gap: .25rem;
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-input {
+:root {
+    --background-color-white: #EBF4FB;
+    --box-shadow-color-white: #ebf0fbce;
+    --foreground-color-white: #181F2E;
+    --highlight-color-white: #FF5252;
+    --box-shadow-orange-color-white: #ff5252ce;
+    --border-color-white: #B3C4D1;
+}
+
+body {
+    height: 100svh;
+}
+
+.search-wrapper {
+    display:flex;
+    flex-direction: row;
+    gap: .25rem;
+    padding: 0.5rem;
+    background-color: white;
+    border: var(--border-color-white) 2px solid;
+    border-radius: 50px;
+}
+
+input, input:focus {
     font-size: 1rem;
+    width: 90%;
+    outline: none;
+    border: none;
 }
 
 .user-cards {
@@ -37,29 +63,91 @@ input {
 #main-section {
     display: flex;
     flex-direction: row;
-    height: 92vh;
+    height: 100%;
 }
 
 #sidebar {
-    width: min(250px, 35vw);
+    width: min(500px, 60vw);
+    background-color: #EBF4FB;
+    padding: 1rem;
 }
 
 #rightside-panel {
+    padding: 20px;
     width: 98%;
-    height: 98%;
 }
 
 #display-messages {
-    height: 95vh;
-    overflow-y: scroll;
+    padding-right: 20px;
+    display: grid;
 }
 
 #input-area {
-    display: fixed grid;
+    position: absolute;
+    bottom: 30px;
     height: 26px;
-    grid-column: 1fr auto;
+    width: 60%;
 }
 
-#input-area {
-    width: 100%
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    gap:0.5rem;
+}
+
+.date {
+    display: grid;
+    justify-self: center;
+    font-size: .8rem;
+    color: var(--border-color-white);
+    padding: 5px 10px 5px 10px;
+    font-style: italic;
+    border-radius: 15px;
+    width: fit-content;
+    background-color: var(--foreground-color-white);
+}
+
+#chat-container {
+    flex-direction: column;
+    width: min-content;
+    margin: 0.8rem;
+}
+
+#profilepic {
+    width: 15px;
+    height: 15px;
+    padding: 15px;
+    background-color: var(--foreground-color-white);
+    border-radius: 50%;
+}
+
+#message {
+    font-size: 1rem;
+    padding: 0.5rem 20px 0.5rem 20px;
+    font-style: bold;
+    background-color: var(--background-color-white);
+    box-shadow: 1px 1px 5px var(--box-shadow-color-white);
+    color: var(--foreground-color-white);
+    border: var(--background-color-white) 2px solid;
+    border-radius: 25px;
+}
+
+/* #message.self {
+    border: var(--foreground-color-white);
+    box-shadow: 1px 1px 5px var(--box-shadow-orange-color-white);
+} */
+
+#time, #user {
+    color: var(--border-color-white);
+    font-size: 0.8rem;
+}
+
+#time {
+    width: 100%;
+    text-align: right;
+}
+
+#user {
+    padding-left: 70px;
+    padding-bottom: 5px;
 }

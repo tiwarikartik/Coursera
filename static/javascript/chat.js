@@ -4,15 +4,29 @@ let room;
 
 // Displaying Received Messages
 socket.on("secret", (data) => {
-    const template = document.querySelector("#chat");
-    const content = template.content.cloneNode(true);
+    let arr = data.time.split(" ");
+    let date = `${arr[0]} ${arr[1]} ${arr[2]}`;
+    let time = `${arr[3]} ${arr[4]}`;
 
-    content.querySelector("#user").append(data.username);
-    content.querySelector("#time").append(data.timestamp);
-    content.querySelector("#message").append(data.msg);
+    let dates = document.querySelectorAll(".date");
 
-    messages.append(content);
-    messages.scrollTo(0, messages.scrollHeight);
+    if (dates.length == 0) {
+        messages.innerHTML += `<div class='date'>${date}</div>`;
+    } else {
+        let lastdate = dates[dates.length - 1];
+        if (lastdate.textContent != date) {
+            messages.innerHTML += `<div class='date'>${date}</div>`;
+        }
+    }
+
+    let txtTemplate = document.querySelector("#chat");
+    let txtContent = txtTemplate.content.cloneNode(true);
+
+    txtContent.querySelector("#user").append(data.sender);
+    txtContent.querySelector("#time").append(time);
+    txtContent.querySelector("#message").append(data.message);
+
+    messages.append(txtContent);
 });
 
 socket.on("createRoom", (data) => {});

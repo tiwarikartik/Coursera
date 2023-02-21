@@ -184,10 +184,10 @@ def message(data):
     emit(
         "secret",
         {
-            "msg": message,
-            "username": user.username,
+            "message": message,
+            "sender": user.username,
             "room": room.name.title(),
-            "timestamp": timestamp,
+            "time": timestamp,
         },
         to=room.name.title(),
     )

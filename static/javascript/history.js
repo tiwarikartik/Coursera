@@ -2,12 +2,31 @@ socket.on("pastmessages", (json) => {
     document.querySelector("#display-messages").innerHTML = "";
 
     json.forEach((data) => {
+        let arr = data.time.split(" ");
+        let date = `${arr[0]} ${arr[1]} ${arr[2]}`;
+        let time = `${arr[3]} ${arr[4]}`;
+
+        let dates = document.querySelectorAll(".date");
+
+        if (dates.length == 0) {
+            messages.innerHTML += `<div class='date'>${date}</div>`;
+        } else {
+            let lastdate = dates[dates.length - 1];
+            if (lastdate.textContent != date) {
+                messages.innerHTML += `<div class='date'>${date}</div>`;
+            }
+        }
+
         if (data.type == "text") {
             let txtTemplate = document.querySelector("#chat");
             let txtContent = txtTemplate.content.cloneNode(true);
 
+            if (username == data.sender) {
+                txtContent.querySelector("#message").className = "self";
+            }
+
             txtContent.querySelector("#user").append(data.sender);
-            txtContent.querySelector("#time").append(data.time);
+            txtContent.querySelector("#time").append(time);
             txtContent.querySelector("#message").append(data.message);
 
             messages.append(txtContent);

@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat Room</title>
 
+    <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
         integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
         crossorigin="anonymous"></script>
@@ -23,13 +24,13 @@
         {# Room Selection #}
         <nav id="sidebar">
             <div class="search-wrapper">
-            </lord-icon>
-                <label for="search">Search Users</label>
-                <input type="search" id="search" data-search/>
-
-                <div data-user-card-container>
-                </div>
+                <i>
+                    <lord-icon src="https://cdn.lordicon.com/rlizirgt.json" colors="primary:#b3c4d1" trigger="hover"/>
+                </i>
+                <input type="search" id="search" placeholder="Search Users" data-search>
+                </input>
             </div>
+            <div data-user-card-container></div>
             {% for room in rooms %}
                 <p class="select-room">{{ room|title }}</p>
             {% endfor %}
@@ -52,9 +53,15 @@
 
     {# Chats Templates #}
     <template id='chat'>
-        <p id="user"></p>
-        <h1 id="message"></h1>
-        <p id="time"></p>
+        <div id="chat-container flex-row">
+            <p id="date"></p>
+            <p id="user"></p>
+            <div class="flex-row">
+                <div id="profilepic"></div>
+                <p id="message"></p>
+            </div>
+            <p id="time"></p>
+        </div>
     </template>
 
     {# Audio Templates #}
