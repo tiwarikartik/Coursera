@@ -23,10 +23,10 @@ app.config["SQLALCHEMY_ECHO"] = True
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = "postgresql://chatapp_gamm_user:veUjJBD1aGAfgVFRHMHEhn0Bp0g2FLCv@dpg-cf415q6n6mps0qn9faug-a.oregon-postgres.render.com/chatapp_gamm"  # os.environ.get("DATABASE_URL")
+] = "postgresql://practicedb_j9l4_user:5BMCGCDq8PYDjKrt10E17HZsLf6MrWZy@dpg-cfag8hhgp3jsh6f4ost0-a.oregon-postgres.render.com/practicedb_j9l4"  # os.environ.get("DATABASE_URL")
 
 db = SQLAlchemy(app)
-from models.Users import Users, Duo, user_duo, History
+from models.Users import Users, Duo, user_duo, History, Files
 
 # Initialize Flask-SocketIO
 socketio = SocketIO(app)
@@ -101,6 +101,22 @@ def chat():
     return render_template("chat.html", username=current_user.username, rooms=ROOMS)
 
 
+@app.route("/experiment", methods=["GET", "POST"])
+def experiment():
+    cur = db.engine.execute(
+        "SELECT bindata, send_by, sent_in, send_on FROM Files UNION ALL SELECT message, send_by, sent_in, send_on FROM History ORDER BY send_on;"
+    )
+
+    i = 1
+    response = {}
+    for each in cur:
+        response.update({f"Record {i}": list(each)})
+        i += 1
+
+    print(response)
+    return response
+
+
 @app.route("/logout", methods=["GET"])
 def logout():
     logout_user()
@@ -158,8 +174,11 @@ def message(data):
         sent_in=room.id,
         send_on=datetime.strptime(timestamp, "%d %b %Y %I:%M %p"),
     )
-    print(room.name.title())
     db.session.add(savemessage)
+    db.session.commit()
+
+    files = Files(messageid=savemessage.id, binary=None)
+    db.session.add(files)
     db.session.commit()
 
     emit(
@@ -179,26 +198,49 @@ def getHistory(data):
     room = data["room"]
     user = data["user"]
 
+    roomid = db.session.query(Duo.id).filter_by(name=room).one()[0]
+    print(roomid)
     alls = (
-        db.session.query(History, Users, Duo)
+        db.session.query(History, Duo, Users, Files.binary)
         .join(Users)
         .join(Duo)
-        .filter(Duo.name == room)
+        .join(Files)
+        .filter(History.sent_in == roomid)
+        .order_by(History.send_on)
         .all()
     )
 
     array = []
-    for history, user, duo in alls:
-        datetime = history.send_on
-        array.append(
-            {
-                "message": history.message,
-                "username": user.username,
-                "timestamp": datetime.strftime("%d %b %Y %I:%M %p"),
-                "room": duo.name,
-            }
-        )
-    print(array)
+    for history, duo, user, files in alls:
+
+        print(history.send_on, type(history.send_on), sep="\n\n\n\n")
+        timestamp = history.send_on.strftime("%d %b %Y %I:%M %p")
+
+        if history.message == None:
+            print(files)
+            print(history.send_on)
+            print(timestamp)
+            array.append(
+                {
+                    "type": "audio",
+                    "sender": user.username,
+                    "time": timestamp,
+                    "room": duo.name.title(),
+                    "binary": files,
+                }
+            )
+        elif files == None:
+            print(history)
+            print(history.send_on)
+            array.append(
+                {
+                    "type": "text",
+                    "sender": user.username,
+                    "time": timestamp,
+                    "room": duo.name.title(),
+                    "message": history.message,
+                }
+            )
     emit("pastmessages", array, to=room.title())
 
 
@@ -220,16 +262,30 @@ def leave(data):
 
 @socketio.on("audio-data")
 def handle_audio_data(data):
-    room = data["room"]
+    room = Duo.query.filter_by(name=data["room"]).first()
+    user = Users.query.filter_by(username=data["sender"]).first()
+    filetype = data["fileType"]
+    message = data["audio_data"]
+    timestamp = strftime("%d %b %Y %I:%M %p", localtime())
+
+    entry = History(message=None, send_by=user.id, sent_in=room.id, send_on=timestamp)
+    db.session.add(entry)
+    db.session.commit()
+
+    print(f"\n\n\n\n{entry.id}\n\n\n\n")
+    savefile = Files(binary=message, messageid=entry.id, filetype=filetype)
+    db.session.add(savefile)
+    db.session.commit()
+
     info = {
         "audio_data": data["audio_data"],
         "sender": data["sender"],
-        "room": room,
+        "room": data["room"],
     }
     emit(
         "audioBlob",
         info,
-        to=room.title(),
+        to=data["room"].title(),
     )
 
 

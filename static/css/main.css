@@ -37,7 +37,7 @@ input {
 #main-section {
     display: flex;
     flex-direction: row;
-    height: 98vh;
+    height: 92vh;
 }
 
 #sidebar {
@@ -56,7 +56,7 @@ input {
 
 #input-area {
     display: fixed grid;
-    height: 50px;
+    height: 26px;
     grid-column: 1fr auto;
 }
 

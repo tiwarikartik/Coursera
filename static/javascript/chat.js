@@ -1,10 +1,9 @@
 const socket = io.connect("");
+const messages = document.querySelector("#display-messages");
 let room;
 
 // Displaying Received Messages
 socket.on("secret", (data) => {
-    console.log(data);
-    const messages = document.querySelector("#display-messages");
     const template = document.querySelector("#chat");
     const content = template.content.cloneNode(true);
 
@@ -13,22 +12,7 @@ socket.on("secret", (data) => {
     content.querySelector("#message").append(data.msg);
 
     messages.append(content);
-});
-
-socket.on("pastmessages", (json) => {
-    console.log(json);
-    document.querySelector("#display-messages").innerHTML = "";
-    json.forEach((data) => {
-        const messages = document.querySelector("#display-messages");
-        const template = document.querySelector("#chat");
-        const content = template.content.cloneNode(true);
-
-        content.querySelector("#user").append(data.username);
-        content.querySelector("#time").append(data.timestamp);
-        content.querySelector("#message").append(data.message);
-
-        messages.append(content);
-    });
+    messages.scrollTo(0, messages.scrollHeight);
 });
 
 socket.on("createRoom", (data) => {});

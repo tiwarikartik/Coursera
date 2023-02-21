@@ -26,9 +26,6 @@ class Users(UserMixin, db.Model):
     chats = db.relationship("Duo", secondary=user_duo, backref="participants")
     messages = db.relationship("History", backref="sender")
 
-    def __repr__(self):
-        return f"<User: {self.username}>\n"
-
 
 class Duo(db.Model):
     __tablename__ = "duo"
@@ -36,9 +33,6 @@ class Duo(db.Model):
     name = db.Column(db.String, default=None)
     desc = db.Column(db.String, default=None)
     message = db.relationship("History", backref="chat")
-
-    def __repr__(self):
-        return f"<Duo: {self.name}>\n"
 
 
 class History(db.Model):
@@ -48,3 +42,12 @@ class History(db.Model):
     send_by = db.Column(db.Integer, db.ForeignKey("users.id"))
     sent_in = db.Column(db.Integer, db.ForeignKey("duo.id"))
     send_on = db.Column(db.DateTime, default=datetime.utcnow())
+    files = db.relationship("Files", backref="message")
+
+
+class Files(db.Model):
+    __tablename__ = "files"
+    id = db.Column(db.Integer, primary_key=True)
+    binary = db.Column(db.LargeBinary)
+    messageid = db.Column(db.Integer, db.ForeignKey("history.id"))
+    filetype = db.Column(db.String, default=None)

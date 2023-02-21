@@ -22,7 +22,8 @@ socket.on("audioBlob", (data) => {
         evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
     };
 
-    document.getElementById("display-messages").appendChild(content);
+    messages.appendChild(content);
+    messages.scrollTo(0, messages.scrollHeight);
     console.log(content);
 });
 
@@ -70,6 +71,7 @@ if (navigator.mediaDevices) {
                             audio_data: arr,
                             sender: username,
                             room: room.toLowerCase(),
+                            fileType: "audio",
                         };
                         console.table(arr);
                         socket.emit("audio-data", info);
