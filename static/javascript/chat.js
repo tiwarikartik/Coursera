@@ -24,7 +24,7 @@ socket.on("secret", (data) => {
 
     txtContent.querySelector("#user").append(data.sender);
     txtContent.querySelector("#time").append(time);
-    txtContent.querySelector("#message").append(data.message);
+    txtContent.querySelector(".message").append(data.message);
 
     messages.append(txtContent);
 });

@@ -18,18 +18,44 @@ socket.on("pastmessages", (json) => {
         }
 
         if (data.type == "text") {
-            let txtTemplate = document.querySelector("#chat");
-            let txtContent = txtTemplate.content.cloneNode(true);
-
-            if (username == data.sender) {
-                txtContent.querySelector("#message").className = "self";
+            // variables initialization
+            let lastMessage, lastSender, lastSentTime;
+            let allMessage = document.querySelectorAll("#chat-container");
+            try {
+                lastSender =
+                    allMessage[allMessage.length - 1].querySelector(
+                        "#user"
+                    ).textContent;
+                lastSentTime =
+                    allMessage[allMessage.length - 1].querySelector(
+                        "#time"
+                    ).textContent;
+            } catch (err) {
+                console.log("error occured");
             }
 
-            txtContent.querySelector("#user").append(data.sender);
-            txtContent.querySelector("#time").append(time);
-            txtContent.querySelector("#message").append(data.message);
+            if (data.sender == lastSender && time == lastSentTime) {
+                allMessage = document.querySelectorAll("#chat-container");
+                lastMessage =
+                    allMessage[allMessage.length - 1].querySelector(
+                        ".flex-col"
+                    );
+                console.log(lastMessage);
+                lastMessage.innerHTML += `<p class='message'>${data.message}</p>`;
+            } else {
+                let txtTemplate = document.querySelector("#chat");
+                let txtContent = txtTemplate.content.cloneNode(true);
+                let chatContainer = txtContent.querySelector("#chat-container");
 
-            messages.append(txtContent);
+                if (username == data.sender) {
+                    chatContainer.setAttribute("class", "right");
+                }
+
+                txtContent.querySelector("#user").append(data.sender);
+                txtContent.querySelector("#time").append(time);
+                txtContent.querySelector(".message").append(data.message);
+                messages.append(txtContent);
+            }
         } else if (data.type == "audio") {
             let audioTemplate = document.querySelector("[data-audio-template]");
             let audioContent = audioTemplate.content.cloneNode(true);

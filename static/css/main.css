@@ -78,8 +78,13 @@ input, input:focus {
 }
 
 #display-messages {
-    padding-right: 20px;
     display: grid;
+    align-items: start;
+    align-content: start;
+    justify-items: normal;
+    width: 100%;
+    overflow-y: scroll;
+    height: calc(100vh - 100px);
 }
 
 #input-area {
@@ -109,8 +114,12 @@ input, input:focus {
 
 #chat-container {
     flex-direction: column;
-    width: min-content;
     margin: 0.8rem;
+}
+
+.self {
+    display: grid;
+    justify-items: end;
 }
 
 #profilepic {
@@ -121,10 +130,11 @@ input, input:focus {
     border-radius: 50%;
 }
 
-#message {
+.message {
     font-size: 1rem;
     padding: 0.5rem 20px 0.5rem 20px;
     font-style: bold;
+    width: max-content;
     background-color: var(--background-color-white);
     box-shadow: 1px 1px 5px var(--box-shadow-color-white);
     color: var(--foreground-color-white);
@@ -132,7 +142,7 @@ input, input:focus {
     border-radius: 25px;
 }
 
-/* #message.self {
+/* .message.self {
     border: var(--foreground-color-white);
     box-shadow: 1px 1px 5px var(--box-shadow-orange-color-white);
 } */
@@ -140,14 +150,34 @@ input, input:focus {
 #time, #user {
     color: var(--border-color-white);
     font-size: 0.8rem;
+    padding: 5px 75px 5px 75px;
 }
 
-#time {
-    width: 100%;
-    text-align: right;
+.right {
+    display: grid;
+    justify-items: end;
 }
 
-#user {
-    padding-left: 70px;
-    padding-bottom: 5px;
+.right > .flex-row {
+    flex-direction: row-reverse;
+}
+
+.right > #user {
+    padding-right: 70px;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: inherit;
+    align-items: flex-start;
+}
+.right > .flex-row > .flex-col {
+    align-items: flex-end;
+}
+.right > .flex-row > .flex-col > .message {
+    background-color: var(--highlight-color-white);
+    box-shadow: 1px 1px 5px var(--box-shadow-orange-color-white);
+    color: white;
+    border: var(--highlight-color-white) 2px solid;
 }

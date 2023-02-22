@@ -113,7 +113,6 @@ def experiment():
         response.update({f"Record {i}": list(each)})
         i += 1
 
-    print(response)
     return response
 
 
@@ -162,7 +161,6 @@ def createRoom(data):
 
 @socketio.on("message")
 def message(data):
-    print(f"\n{data}\n")
     room = Duo.query.filter_by(name=data["room"]).first()
     user = Users.query.filter_by(username=data["username"]).first()
     message = data["msg"]
@@ -199,7 +197,6 @@ def getHistory(data):
     user = data["user"]
 
     roomid = db.session.query(Duo.id).filter_by(name=room).one()[0]
-    print(roomid)
     alls = (
         db.session.query(History, Duo, Users, Files.binary)
         .join(Users)
@@ -213,13 +210,10 @@ def getHistory(data):
     array = []
     for history, duo, user, files in alls:
 
-        print(history.send_on, type(history.send_on), sep="\n\n\n\n")
         timestamp = history.send_on.strftime("%d %b %Y %I:%M %p")
 
         if history.message == None:
-            print(files)
-            print(history.send_on)
-            print(timestamp)
+
             array.append(
                 {
                     "type": "audio",
@@ -230,8 +224,7 @@ def getHistory(data):
                 }
             )
         elif files == None:
-            print(history)
-            print(history.send_on)
+
             array.append(
                 {
                     "type": "text",
@@ -272,7 +265,6 @@ def handle_audio_data(data):
     db.session.add(entry)
     db.session.commit()
 
-    print(f"\n\n\n\n{entry.id}\n\n\n\n")
     savefile = Files(binary=message, messageid=entry.id, filetype=filetype)
     db.session.add(savefile)
     db.session.commit()

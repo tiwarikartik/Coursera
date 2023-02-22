@@ -53,12 +53,14 @@
 
     {# Chats Templates #}
     <template id='chat'>
-        <div id="chat-container flex-row">
+        <div id="chat-container">
             <p id="date"></p>
             <p id="user"></p>
             <div class="flex-row">
                 <div id="profilepic"></div>
-                <p id="message"></p>
+                <div class="flex-col">
+                    <p class="message"></p>
+                </div>
             </div>
             <p id="time"></p>
         </div>
