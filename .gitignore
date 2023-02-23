@@ -1,6 +1,5 @@
 # created by virtualenv automatically
 venv
-output.js
 .vscode
 __pycache__
 models/__pycache__

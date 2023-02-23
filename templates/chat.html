@@ -3,6 +3,8 @@
 
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/files.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/attachment.css') }}" />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,6 +19,7 @@
     <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/rooms.js')}}"defer></script>
     <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/search.js')}}" defer></script>
     <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/audio.js')}}" defer></script>
+    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/files.js')}}" defer></script>
 </head>
 <body>
     <nav></nav>
@@ -47,6 +50,7 @@
                 <button type="button" id="send-message">send</button>
                 <button type="button" id="stop">stop</button>
                 <button type="button" id="record">record</button>
+                <button type="button" id="file-btn">attach a file</button>
             </div>
         </div>
     </div>
@@ -80,6 +84,20 @@
         <div class="card">
             <div class="header" data-header></div>
             <div class="body" data-body></div>
+        </div>
+    </template>
+
+    {# File Template #}
+    <template id="file-template">
+        <div class="attachment">
+            <div class="icons-and-details">
+                <lord-icon class="doc-icon" src="https://cdn.lordicon.com/frjgvxce.json" trigger="boomerang"></lord-icon>
+                <div id="doc-details">
+                    <div class="doc-title"></div>
+                    <div class="doc-size"></div>
+                </div>
+            </div>
+            <a class="doc-download" href='' download=''> <lord-icon src="https://cdn.lordicon.com/albqovim.json" trigger="hover"></lord-icon></a>
         </div>
     </template>
 

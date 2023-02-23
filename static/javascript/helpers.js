@@ -1,5 +1,4 @@
 function textRenderer(data) {
-    let messages = document.body.querySelector("#display-messages");
     let arr = data.time.split(" ");
     let date = `${arr[0]} ${arr[1]} ${arr[2]}`;
     let time = `${arr[3]} ${arr[4]}`;

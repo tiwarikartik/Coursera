@@ -1,0 +1,44 @@
+:root {
+    --background-color-white: #EBF4FB;
+    --box-shadow-color-white: #ebf0fbce;
+    --foreground-color-white: #181F2E;
+    --highlight-color-white: #FF5252;
+    --box-shadow-orange-color-white: #ff5252ce;
+    --border-color-white: #B3C4D1;
+}
+
+.selection {
+    z-index: 1;
+    width: inherit;
+    height: inherit;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+#file-upload {
+    display: grid;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    justify-items: center;
+    gap: 1rem;
+    border: dashed 5px var(--highlight-color-white);
+    height: -webkit-fill-available;
+    width: -webkit-fill-available;
+}
+
+.upload-file-icon {
+    width: 200px;
+    height: 200px;
+}
+
+.title {
+    font-size: 2.5rem;
+    color: var(--foreground-color-white);
+}
+
+.desc {
+    font-size: 1.2rem;
+    color: var(--border-color-white);
+}

@@ -1,0 +1,29 @@
+:root {
+    font-family: 'Cascadia Code';
+}
+
+.attachment {
+    display: flex;
+    width: 250px;
+    height: max-content;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: aliceblue;
+}
+
+.icons-and-details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.doc-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}

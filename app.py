@@ -281,5 +281,10 @@ def handle_audio_data(data):
     )
 
 
+@socketio.on("file-sender")
+def sendFiles(data):
+    emit("file-receiver", data)
+
+
 if __name__ == "__main__":
     socketio.run(app)

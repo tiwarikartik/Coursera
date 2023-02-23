@@ -32,5 +32,5 @@ function leaveRoom(room) {
 // Join a room
 function joinRoom(room) {
     socket.emit("join", { username: username, room: room });
-    document.querySelector("#display-messages").innerHTML = "";
+    messages.innerHTML = "";
 }
