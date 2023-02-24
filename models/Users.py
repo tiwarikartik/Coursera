@@ -51,3 +51,5 @@ class Files(db.Model):
     binary = db.Column(db.LargeBinary)
     messageid = db.Column(db.Integer, db.ForeignKey("history.id"))
     filetype = db.Column(db.String, default=None)
+    name = db.Column(db.String, default=None)
+    size = db.Column(db.String, default=None)

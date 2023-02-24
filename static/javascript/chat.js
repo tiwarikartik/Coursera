@@ -11,28 +11,10 @@ socket.on("secret", (data) => {
 socket.on("pastmessages", (json) => {
     document.querySelector("#display-messages").innerHTML = "";
     json.forEach((data) => {
-        if ((data.type = "text")) textRenderer(data);
-        else if (data.type == "audio") {
-            let audioTemplate = document.querySelector("[data-audio-template]");
-            let audioContent = audioTemplate.content.cloneNode(true);
-            let audio = audioContent.querySelector("#audio");
-
-            audioContent.querySelector("#clipName").innerText = data.sender;
-
-            // getting the audio Uint8Array and converting to blob
-            let blob = new Blob([data.binary]);
-
-            let audioURL = URL.createObjectURL(blob);
-            audio.src = audioURL;
-
-            audioContent.querySelector("#delete").onclick = (e) => {
-                let evtTgt = e.target;
-                evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
-            };
-
-            messages.appendChild(audioContent);
-            console.log(audioContent);
-        }
+        console.log(data.type);
+        if (data.type == null) textRenderer(data);
+        else if (data.type == "audio") audioRenderer(data);
+        else fileRenderer(data);
     });
 });
 

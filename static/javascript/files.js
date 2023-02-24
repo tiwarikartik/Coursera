@@ -10,34 +10,12 @@ let sizeOf = function (bytes) {
 
 let attachemntBtn = document.querySelector("#file-btn");
 socket.on("file-receiver", (json) => {
-    let arrayBuffer = json.file;
-    let date = new Date(json.lastModified);
-    let file = new File([arrayBuffer], json.name, { type: json.type });
-    let url = URL.createObjectURL(file);
-
-    let fileTemplate = document.querySelector("#file-template");
-    let fileContent = fileTemplate.content.cloneNode(true);
-
-    fileContent.querySelector(".doc-title").append(json.name);
-    fileContent.querySelector(".doc-size").append(json.size);
-    fileContent.querySelector(".attachment").addEventListener("click", () => {
-        window.open(url, "_blank");
-    });
-    fileContent.querySelector(".doc-download").href = url;
-    fileContent.querySelector(".doc-download").download = json.name;
-    // fileContent.querySelector("#date").append(
-    //     `${date.getUTCDate()}
-    //             /${date.getMonth() + 1}
-    //             /${date.getUTCFullYear()}`
-    // );
     messages.innerHTML = "";
     socket.emit("history", {
         user: username,
         room: room.toLowerCase(),
     });
-    setTimeout(() => {
-        messages.append(fileContent);
-    }, 2000);
+    fileRenderer(json);
 });
 
 attachemntBtn.addEventListener("click", () => {
@@ -56,24 +34,30 @@ attachemntBtn.addEventListener("click", () => {
         </form></section>`;
 });
 
-attachemntBtn.addEventListener("click", () => {
-    const form = document.querySelector("#file-upload");
-    let fileInput = document.querySelector("#file-input");
+attachemntBtn.addEventListener(
+    "click",
+    () => {
+        const form = document.querySelector("#file-upload");
+        let fileInput = document.querySelector("#file-input");
 
-    form.addEventListener("click", () => {
-        fileInput.click();
-    });
-
-    fileInput.addEventListener("change", (e) => {
-        let file = e.target.files[0];
-        console.log(file);
-
-        socket.emit("file-sender", {
-            lastModified: file.lastModified,
-            type: file.type,
-            name: file.name,
-            size: sizeOf(file.size),
-            file: file,
+        form.addEventListener("click", () => {
+            fileInput.click();
         });
-    });
-});
+
+        fileInput.addEventListener("change", (e) => {
+            let file = e.target.files[0];
+            console.log(file);
+
+            socket.emit("file-sender", {
+                user: username,
+                room: room.toLowerCase(),
+                lastModified: file.lastModified,
+                type: file.type,
+                name: file.name,
+                size: sizeOf(file.size),
+                file: file,
+            });
+        });
+    },
+    { once: true }
+);

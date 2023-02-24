@@ -90,30 +90,9 @@ def chat():
         flash("Please login", "danger")
         return redirect(url_for("login"))
 
-    starts = [
-        i.name
-        for i in Duo.query.filter(Duo.name.startswith(current_user.username)).all()
-    ]
-    ends = [
-        i.name for i in Duo.query.filter(Duo.name.endswith(current_user.username)).all()
-    ]
-    ROOMS = starts + ends
+    user = db.session.query(Users).filter_by(username=current_user.username).one()
+    ROOMS = [duo.name for duo in user.chats]
     return render_template("chat.html", username=current_user.username, rooms=ROOMS)
-
-
-@app.route("/experiment", methods=["GET", "POST"])
-def experiment():
-    cur = db.engine.execute(
-        "SELECT bindata, send_by, sent_in, send_on FROM Files UNION ALL SELECT message, send_by, sent_in, send_on FROM History ORDER BY send_on;"
-    )
-
-    i = 1
-    response = {}
-    for each in cur:
-        response.update({f"Record {i}": list(each)})
-        i += 1
-
-    return response
 
 
 @app.route("/logout", methods=["GET"])
@@ -198,7 +177,7 @@ def getHistory(data):
 
     roomid = db.session.query(Duo.id).filter_by(name=room).one()[0]
     alls = (
-        db.session.query(History, Duo, Users, Files.binary)
+        db.session.query(History, Duo, Users, Files)
         .join(Users)
         .join(Duo)
         .join(Files)
@@ -212,28 +191,18 @@ def getHistory(data):
 
         timestamp = history.send_on.strftime("%d %b %Y %I:%M %p")
 
-        if history.message == None:
-
-            array.append(
-                {
-                    "type": "audio",
-                    "sender": user.username,
-                    "time": timestamp,
-                    "room": duo.name.title(),
-                    "binary": files,
-                }
-            )
-        elif files == None:
-
-            array.append(
-                {
-                    "type": "text",
-                    "sender": user.username,
-                    "time": timestamp,
-                    "room": duo.name.title(),
-                    "message": history.message,
-                }
-            )
+        array.append(
+            {
+                "type": files.filetype,
+                "sender": user.username,
+                "time": timestamp,
+                "room": duo.name.title(),
+                "message": history.message,
+                "binary": files.binary,
+                "fileSize": files.size,
+                "fileName": files.name,
+            }
+        )
     emit("pastmessages", array, to=room.title())
 
 
@@ -283,6 +252,24 @@ def handle_audio_data(data):
 
 @socketio.on("file-sender")
 def sendFiles(data):
+    room = Duo.query.filter_by(name=data["room"]).one()
+    user = Users.query.filter_by(username=data["user"]).one()
+    filetype = data["type"]
+    name = data["name"]
+    file = data["file"]
+    size = data["size"]
+    timestamp = strftime("%d %b %Y %I:%M %p", localtime())
+    print(user.id, room.id, sep="\n\n", end="\n\n")
+
+    entry = History(message="", send_by=user.id, sent_in=room.id, send_on=timestamp)
+    db.session.add(entry)
+    db.session.commit()
+
+    savefile = Files(
+        name=name, binary=file, messageid=entry.id, filetype=filetype, size=size
+    )
+    db.session.add(savefile)
+    db.session.commit()
     emit("file-receiver", data)
 
 
