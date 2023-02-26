@@ -92,7 +92,29 @@ def chat():
 
     user = db.session.query(Users).filter_by(username=current_user.username).one()
     ROOMS = [duo.name for duo in user.chats]
-    return render_template("chat.html", username=current_user.username, rooms=ROOMS)
+    # LASTMESSAGE = list()
+
+    # for i in ROOMS:
+    #     lastMessage = (
+    #         db.session.query(History, Duo, Users, Files)
+    #         .join(Users)
+    #         .join(Duo)
+    #         .join(Files)
+    #         .filter(History.sent_in == 2)
+    #         .order_by(History.send_on.desc())
+    #         .first()
+    #     )
+    #     for history, duo, user, files in lastMessage:
+    #         if history.message == None:
+    #             LASTMESSAGE.append(files.size)
+    #         else:
+    #             LASTMESSAGE.append(history.message)
+
+    return render_template(
+        "chat.html",
+        username=current_user.username,
+        rooms=ROOMS,  # , lastMsg=LASTMESSAGE
+    )
 
 
 @app.route("/logout", methods=["GET"])

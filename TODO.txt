@@ -1,0 +1,13 @@
+[j for j in [ i for i in 'kajal x kartik'.split(username) if i != ""][0].split(' x ') if j != ""]
+for i in room.split(username):
+...     if i != "":
+...             room = i
+
+for j in room.split(" x "):
+...     if j != "":
+...             print(j)
+
+Convert ROOMs from "Kajal x kartik" to Kartik for kajal
+
+
+Uses sessions for room and username

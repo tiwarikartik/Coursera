@@ -2,9 +2,6 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/files.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/attachment.css') }}" />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,6 +17,8 @@
     <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/search.js')}}" defer></script>
     <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/audio.js')}}" defer></script>
     <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/files.js')}}" defer></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
 </head>
 <body>
     <nav></nav>
@@ -33,24 +32,53 @@
                 <input type="search" id="search" placeholder="Search Users" data-search>
                 </input>
             </div>
-            <div data-user-card-container></div>
-            {% for room in rooms %}
-                <p class="select-room">{{ room|title }}</p>
-            {% endfor %}
+            <div data-user-card-container>
+                <div id="messages-title">Messages</div>
+                {% for room in rooms %}
+                    <div class="contact">  
+                        <span>
+                            <div id="profilepic"></div>
+                        </span>
+                        <span class="namelastmsg">
+                            <h3 class="select-room">{{ room|title }}</h3>
+                            <p class="latest-msg">lorem ipsum dolor</p>
+                        </span>
+                        <p class="last-msg-time">04:44 PM</p>
+                    </div>
+                    
+                {% endfor %}
+            </div>
         </nav>
 
         {# Message Area #}
         <div id="rightside-panel">
+            <div id="profile">
+                <div id="profilepic"></div>
+                <h2 id="username">Kajal</h2>
+                <p id="last-seen">24:08PM</p>
+            </div>
             <div id="display-messages">
             </div>
             
             {# Input Message #}
-            <div id="input-area">
+            <div class="input-area">
+                
                 <input type="text" id="user-message" placeholder="Type Messages here ...." autocomplete="off">
-                <button type="button" id="send-message">send</button>
-                <button type="button" id="stop">stop</button>
-                <button type="button" id="record">record</button>
-                <button type="button" id="file-btn">attach a file</button>
+                
+                <button type="button" id="send-message" class="btn">
+                    <img src="{{ url_for('static', filename='icons/send.svg') }}" />
+                </button>
+                
+                <button type="button" id="stop">
+                </button>
+                
+                <button type="button" id="record" class="btn">
+                    <img src="{{ url_for('static', filename='icons/record.svg') }}" />
+                </button>
+
+                <button type="button" id="file-btn" class="btn">
+                    <img src="{{ url_for('static', filename='icons/clip.svg') }}" />
+                </button>
             </div>
         </div>
     </div>

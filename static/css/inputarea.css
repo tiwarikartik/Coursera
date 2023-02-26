@@ -1,0 +1,27 @@
+.input-area{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    background-color: white;
+    font-size: 1.2rem;
+    border-radius: 20px;
+    border: rgb(238, 240, 242) 4px solid;
+}
+
+.btn {
+    color: transparent;
+    background-color: transparent;
+    border: none;
+    width: 24px;
+    height: inherit;
+}
+
+.input-area input {
+    flex-grow: 2; 
+    font-size: 1.2rem;
+    border-radius: 20px;
+    border: none;
+}

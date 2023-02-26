@@ -27,7 +27,7 @@ attachemntBtn.addEventListener("click", () => {
                 class='upload-file-icon'
                 src="https://cdn.lordicon.com/yzqrwwtj.json"
                 trigger="boomerang"
-                colors="primary:#ff5252">
+                colors="primary:#2A85FF">
             </lord-icon>
             <h1 class='title'>Upload a file</h1>
             <p class='desc'>Click anywhere to upload the documents</p>
@@ -43,6 +43,7 @@ attachemntBtn.addEventListener(
         form.addEventListener("click", () => {
             fileInput.click();
         });
+        console.log(room);
 
         fileInput.addEventListener("change", (e) => {
             let file = e.target.files[0];

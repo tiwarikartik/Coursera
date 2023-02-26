@@ -1,0 +1,63 @@
+div[data-user-card-container] {
+    padding: 5px 5px 5px 5px;
+    border-radius: 10px;
+    background-color: rgb(238, 240, 242);
+    height: calc(100vh - 100px);
+    overflow: auto;
+}
+
+div[data-user-card-container]:hover > :not(:hover) {
+    background-color: rgb(238, 240, 242);
+}
+
+div[data-user-card-container]:hover > :not(:first-child):hover {
+    transition: 0s forwards;
+    background-color: #fff;
+    border-right: #2A85FF 3px solid;
+}
+
+#messages-title {
+    position: sticky;
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px 10px 0 0;
+    font-size: 25px;
+    margin: 5px;
+}
+
+.contact {
+    padding: 15px;
+    margin: 5px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    gap: 10px;
+    transition: 0.3s;
+}
+
+.contact:last-child {
+    border-radius: 0 0 10px 10px;
+}
+
+.select-room {
+    font-weight:500;
+}
+
+.namelastmsg {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 2;
+    gap: 4px;
+}
+
+.latest-msg, .last-msg-time{
+    font-size: 0.8rem;
+}
+
+.last-msg-time {
+    align-self: right;
+    left: 0;
+    top: 0;
+}
+
