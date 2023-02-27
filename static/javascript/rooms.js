@@ -3,9 +3,18 @@ socket.on("info", (data) => {
 });
 
 // Selecting Rooms
-document.querySelectorAll(".select-room").forEach((p) => {
-    p.onclick = () => {
-        let newRoom = p.innerHTML;
+document.querySelectorAll(".contact").forEach((elem) => {
+    elem.classList.remove("active");
+    elem.onclick = () => {
+        document.querySelectorAll(".contact").forEach((notClicked) => {
+            notClicked.classList.remove("active");
+        });
+        elem.classList.toggle("active");
+
+        let newRoom = elem.querySelector("#names").textContent;
+        document.querySelector("#username").innerHTML =
+            elem.querySelector(".room-name").textContent;
+
         if (newRoom == room) {
             msg = `You are already in ${room} room.`;
             printSysMsg(msg);

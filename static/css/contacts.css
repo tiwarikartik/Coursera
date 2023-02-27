@@ -1,8 +1,7 @@
 div[data-user-card-container] {
-    padding: 5px 5px 5px 5px;
     border-radius: 10px;
     background-color: rgb(238, 240, 242);
-    height: calc(100vh - 100px);
+    max-height: calc(100vh - 100px);
     overflow: auto;
 }
 
@@ -14,6 +13,21 @@ div[data-user-card-container]:hover > :not(:first-child):hover {
     transition: 0s forwards;
     background-color: #fff;
     border-right: #2A85FF 3px solid;
+}
+
+div[data-user-card-container] > :not(.active) {
+    background-color: rgb(238, 240, 242);
+    border-right: none;
+}
+
+.active {
+    background-color: #fff;
+    border-right: #2A85FF 3px solid;
+}
+
+div[data-user-card-container] ~ :not(.active) {
+    background-color: rgb(238, 240, 242);
+    border-right: none;
 }
 
 #messages-title {
@@ -40,7 +54,7 @@ div[data-user-card-container]:hover > :not(:first-child):hover {
     border-radius: 0 0 10px 10px;
 }
 
-.select-room {
+.room-name {
     font-weight:500;
 }
 
@@ -60,4 +74,3 @@ div[data-user-card-container]:hover > :not(:first-child):hover {
     left: 0;
     top: 0;
 }
-

@@ -82,6 +82,7 @@ input, input:focus {
     padding: 1rem;
     display: flex;
     flex-direction: column;
+    border: 2px rgb(238, 240, 242) solid;
     gap: 1rem;
 }
 
@@ -99,5 +100,5 @@ input, input:focus {
     justify-items: normal;
     width: 95%;
     overflow-y: auto;
-    height: calc(100vh - 190px);
+    height: calc(100vh - 210px);
 }

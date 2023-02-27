@@ -1,0 +1,19 @@
+#profile {
+    border: 2px solid rgb(238, 240, 242);
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    align-items: center;
+    gap: 10px;
+}
+
+#last-seen {
+    font-size: 0.8rem;
+    padding-top: 5px;
+}
+
+.back {
+    width: 30px;
+    height: 30px;
+}

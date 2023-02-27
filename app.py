@@ -91,28 +91,40 @@ def chat():
         return redirect(url_for("login"))
 
     user = db.session.query(Users).filter_by(username=current_user.username).one()
-    ROOMS = [duo.name for duo in user.chats]
-    # LASTMESSAGE = list()
+    names = [duo.name for duo in user.chats]
+    rooms = [name.split(current_user.username) for name in names]
+    rooms = [i[0].split(" x ") if i[0] != "" else i[1].split(" x ") for i in rooms]
+    ROOMS = [j[0] if j[0] != "" else j[1] for j in rooms]
 
-    # for i in ROOMS:
-    #     lastMessage = (
-    #         db.session.query(History, Duo, Users, Files)
-    #         .join(Users)
-    #         .join(Duo)
-    #         .join(Files)
-    #         .filter(History.sent_in == 2)
-    #         .order_by(History.send_on.desc())
-    #         .first()
-    #     )
-    #     for history, duo, user, files in lastMessage:
-    #         if history.message == None:
-    #             LASTMESSAGE.append(files.size)
-    #         else:
-    #             LASTMESSAGE.append(history.message)
+    LASTMESSAGE = []
+
+    for i in names:
+        duo = Duo.query.filter_by(name=i).first()
+        lastMessage = (
+            db.session.query(History, Files)
+            .filter_by(sent_in=duo.id)
+            .order_by(History.send_on.desc())
+            .join(Files)
+            .first()
+        )
+
+        if lastMessage.__class__.__name__ == "NoneType":
+            LASTMESSAGE.append("")
+        else:
+            history, file = lastMessage
+            if history.message == None:
+                LASTMESSAGE.append(f"{file.type} {file.size}")
+            else:
+                LASTMESSAGE.append(history.message)
+        lastMessage = None
+    print(f"\n\n\n\n\n\n\n\n{LASTMESSAGE}\n\n\n\n\n\n\n\n")
 
     return render_template(
         "chat.html",
         username=current_user.username,
+        length=len(ROOMS),
+        names=names,
+        lastmessage=LASTMESSAGE,
         rooms=ROOMS,  # , lastMsg=LASTMESSAGE
     )
 
@@ -124,9 +136,9 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route("/api/<limit>", methods=["GET"])
-def get_users(limit):
-    users = Users.query.all()[: int(limit)]
+@app.route("/api/<enteredUsername>", methods=["GET"])
+def get_users(enteredUsername):
+    users = Users.query.filter(Users.username.ilike(f"%{enteredUsername}%")).all()
     arr = []
     for user in users:
         arr.append({"username": user.username, "email": user.email})
@@ -153,6 +165,7 @@ def createRoom(data):
         user1.chats.append(newRoom)
         user2.chats.append(newRoom)
         db.session.commit()
+
     join_room(roomName)
     ROOMS = [i.name for i in Duo.query.all()]
     # newRoom = Duo(name=f"{user1} x {user2}")
