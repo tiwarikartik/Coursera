@@ -12,6 +12,10 @@ document.querySelectorAll(".contact").forEach((elem) => {
         elem.classList.toggle("active");
 
         let newRoom = elem.querySelector("#names").textContent;
+        document.querySelector("#profile").classList.remove("invisible");
+        document
+            .querySelectorAll(".input-area")[0]
+            .classList.remove("invisible");
         document.querySelector("#username").innerHTML =
             elem.querySelector(".room-name").textContent;
 

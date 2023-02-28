@@ -21,6 +21,10 @@
     --border-color-white: #B3C4D1;
 }
 
+.invisible {
+    visibility: hidden;
+}
+
 body {
     height: 100svh;
 }

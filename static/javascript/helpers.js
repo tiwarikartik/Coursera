@@ -31,7 +31,6 @@ function textRenderer(data) {
         allMessage = document.querySelectorAll("#chat-container");
         lastMessage =
             allMessage[allMessage.length - 1].querySelector(".flex-col");
-        console.log(lastMessage);
         lastMessage.innerHTML += `<p class='message'>${data.message}</p>`;
     } else {
         let txtTemplate = document.querySelector("#chat");
@@ -46,7 +45,6 @@ function textRenderer(data) {
         txtContent.querySelector("#time").append(time);
         txtContent.querySelector(".message").append(data.message);
         messages.append(txtContent);
-        console.log(messages.scrollHeight);
         messages.scrollTo(0, messages.scrollHeight);
     }
 }
@@ -73,26 +71,80 @@ function audioRenderer(data) {
 }
 
 function fileRenderer(data) {
-    console.log(data);
-    let arrayBuffer = data.file;
-    // let date = new Date(json.lastModified
-    let file = new File([arrayBuffer], data.name, { type: data.type });
-    let url = URL.createObjectURL(file);
+    let arr = data.time.split(" ");
+    let date = `${arr[0]} ${arr[1]} ${arr[2]}`;
+    let time = `${arr[3]} ${arr[4]}`;
+    let dates = document.querySelectorAll(".date");
     let fileTemplate = document.querySelector("#file-template");
     let fileContent = fileTemplate.content.cloneNode(true);
+    let url = `http://127.0.0.1:5000/sharedfiles/${data.id}`;
+    let file = data.type.split("/")[0];
 
-    fileContent.querySelector(".doc-title").append(data.fileName);
-    fileContent.querySelector(".doc-size").append(data.fileSize);
-    fileContent.querySelector(".attachment").addEventListener("click", () => {
-        window.open(url, "_blank");
-    });
-    fileContent.querySelector(".doc-download").href = url;
-    fileContent.querySelector(".doc-download").download = data.name;
+    if (dates.length == 0) {
+        messages.innerHTML += `<div class='date'>${date}</div>`;
+    } else {
+        let lastdate = dates[dates.length - 1];
+        if (lastdate.textContent != date) {
+            messages.innerHTML += `<div class='date'>${date}</div>`;
+        }
+    }
 
-    messages.append(fileContent);
-    // fileContent.querySelector("#date").append(
-    //     `${date.getUTCDate()}
-    //             /${date.getMonth() + 1}
-    //             /${date.getUTCFullYear()}`
-    // );
+    if (file == "image") {
+        console.log(data);
+        let lastMessage, lastSender, lastSentTime;
+        let allMessage = document.querySelectorAll("#chat-container");
+
+        try {
+            lastSender =
+                allMessage[allMessage.length - 1].querySelector(
+                    "#user"
+                ).textContent;
+            lastSentTime =
+                allMessage[allMessage.length - 1].querySelector(
+                    "#time"
+                ).textContent;
+        } catch (err) {
+            console.log("error occured");
+        }
+
+        if (data.sender == lastSender && time == lastSentTime) {
+            allMessage = document.querySelectorAll("#chat-container");
+            lastMessage =
+                allMessage[allMessage.length - 1].querySelector(".flex-col");
+
+            lastMessage.innerHTML += `<img class="img" src="${url}"></img>`;
+        } else {
+            let txtTemplate = document.querySelector("#chat");
+            let txtContent = txtTemplate.content.cloneNode(true);
+            let chatContainer = txtContent.querySelector("#chat-container");
+            let img = txtContent.querySelectorAll(".flex-col")[0];
+
+            if (username == data.sender) {
+                chatContainer.setAttribute("class", "right");
+            }
+
+            txtContent.querySelector("#user").append(data.sender);
+            txtContent.querySelector("#time").append(time);
+            txtContent.querySelector(".message").remove();
+            img.classList.add("img-col");
+            img.innerHTML = `<img class="img" src="${url}"></img>`;
+            messages.append(txtContent);
+
+            console.log(messages.scrollHeight);
+            messages.scrollTo(0, messages.scrollHeight);
+        }
+    } else if (file == "video") {
+    } else {
+        fileContent.querySelector(".doc-title").append(data.fileName);
+        fileContent.querySelector(".doc-size").append(data.fileSize);
+        fileContent
+            .querySelector(".attachment")
+            .addEventListener("click", () => {
+                window.open(url, "_blank");
+            });
+        fileContent.querySelector(".doc-download").href = url;
+        fileContent.querySelector(".doc-download").download = data.fileName;
+
+        messages.append(fileContent);
+    }
 }

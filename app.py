@@ -1,7 +1,7 @@
 import os, json
 from time import localtime, strftime
 from datetime import datetime
-from flask import Flask, render_template, redirect, url_for, flash
+from flask import Flask, render_template, redirect, url_for, flash, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO, send, emit, join_room, leave_room, rooms
 from wtf_fields import *
@@ -112,10 +112,10 @@ def chat():
             LASTMESSAGE.append("")
         else:
             history, file = lastMessage
-            if history.message == None:
-                LASTMESSAGE.append(f"{file.type} {file.size}")
-            else:
+            if file.filetype == None:
                 LASTMESSAGE.append(history.message)
+            else:
+                LASTMESSAGE.append(f"{file.filetype} {file.size}")
         lastMessage = None
     print(f"\n\n\n\n\n\n\n\n{LASTMESSAGE}\n\n\n\n\n\n\n\n")
 
@@ -143,6 +143,14 @@ def get_users(enteredUsername):
     for user in users:
         arr.append({"username": user.username, "email": user.email})
     return json.dumps(arr)
+
+
+@app.route("/sharedfiles/<ids>")
+def get_send_files(ids):
+    files = Files.query.filter_by(messageid=ids).first()
+    if not files:
+        return "No file", 404
+    return Response(files.binary, mimetype=files.filetype)
 
 
 @socketio.on("room")
@@ -223,17 +231,14 @@ def getHistory(data):
 
     array = []
     for history, duo, user, files in alls:
-
-        timestamp = history.send_on.strftime("%d %b %Y %I:%M %p")
-
         array.append(
             {
                 "type": files.filetype,
                 "sender": user.username,
-                "time": timestamp,
+                "time": history.send_on.strftime("%d %b %Y %I:%M %p"),
                 "room": duo.name.title(),
                 "message": history.message,
-                "binary": files.binary,
+                "id": history.id,
                 "fileSize": files.size,
                 "fileName": files.name,
             }
@@ -305,7 +310,17 @@ def sendFiles(data):
     )
     db.session.add(savefile)
     db.session.commit()
-    emit("file-receiver", data)
+    emit(
+        "file-receiver",
+        {
+            "fileName": name,
+            "fileSize": size,
+            "sender": user.username,
+            "id": entry.id,
+            "type": filetype,
+            "time": entry.send_on.strftime("%d %b %Y %I:%M %p"),
+        },
+    )
 
 
 if __name__ == "__main__":
