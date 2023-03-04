@@ -24,6 +24,13 @@ document.querySelectorAll(".contact").forEach((elem) => {
             elem.querySelector("#profilepic > img").src
         } />`;
 
+        let lastseen = document.querySelector("#last-seen");
+        if (elem.querySelectorAll(".available")[0]) {
+            lastseen.innerHTML = `<span class="circle"></span> Active Now`;
+        } else {
+            lastseen.innerHTML = "Last Seen on ";
+        }
+
         if (newRoom == room) {
             msg = `You are already in ${room} room.`;
             printSysMsg(msg);

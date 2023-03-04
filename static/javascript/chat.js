@@ -2,6 +2,14 @@ const socket = io.connect("");
 let messages = document.querySelector("#display-messages");
 let room;
 
+socket.on("connect", () => {
+    console.log("Connected");
+});
+
+socket.on("disconnect", () => {
+    console.log("Disconnected");
+});
+
 // Displaying Received Messages
 socket.on("secret", (data) => {
     textRenderer(data);

@@ -84,10 +84,13 @@
 .flex-col {
     display: flex;
     flex-direction: column;
-    gap: inherit;
+    gap: 2px;
     align-items: flex-start;
 }
 
+.flex-col :not(:nth-child(1)) {
+    border-radius: 25px;
+}
 .img-col {
     flex-wrap: wrap;
 }
@@ -108,4 +111,8 @@
     color: white;
     border: #3C8CF8 2px solid;
     border-radius: 25px 0px 25px 25px;
+}
+
+.right > .flex-row > .flex-col :not(:nth-child(1)) {
+    border-radius: 25px;
 }

@@ -107,9 +107,13 @@ def chat():
     rooms = [name.split(current_user.username) for name in NAMES]
     rooms = [i[0].split(" x ") if i[0] != "" else i[1].split(" x ") for i in rooms]
     ROOMS = [j[0] if j[0] != "" else j[1] for j in rooms]
+    ACTIVE = list()
 
-    for i in NAMES:
-        duo = Duo.query.filter_by(name=i).first()
+    for i in range(len(NAMES)):
+        ACTIVE.append(
+            db.session.query(Users.active).filter_by(username=ROOMS[i]).first()[0]
+        )
+        duo = Duo.query.filter_by(name=NAMES[i]).first()
         lastMessage = (
             db.session.query(History, Files)
             .filter_by(sent_in=duo.id)
@@ -133,6 +137,7 @@ def chat():
         username=current_user.username,
         length=len(ROOMS),
         names=NAMES,
+        active=ACTIVE,
         lastmessage=LASTMESSAGE,
         rooms=ROOMS,
     )
@@ -195,6 +200,18 @@ def get_send_files(ids):
     if not files:
         return "No file", 404
     return Response(files.binary, mimetype=files.filetype)
+
+
+@socketio.on("connect")
+def connect():
+    Users.query.filter_by(id=current_user.id).update(dict(active=True))
+    db.session.commit()
+
+
+@socketio.on("disconnect")
+def disconnect():
+    Users.query.filter_by(id=current_user.id).update(dict(active=False))
+    db.session.commit()
 
 
 @socketio.on("room")

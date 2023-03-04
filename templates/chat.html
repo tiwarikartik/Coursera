@@ -41,9 +41,12 @@
             <div id="messages-title">Messages</div>
             {% for i in range(0, length) %}
             <div class="contact">
-                    <div id="profilepic">
-                        <img src="http://127.0.0.1:5000/profilepic/{{ rooms[i] }}" />
-                    </div>
+                <div id="profilepic">
+                    {% if active[i] == True %}
+                        <span class="available"></span>
+                    {% endif %}
+                    <img src="http://127.0.0.1:5000/profilepic/{{ rooms[i] }}" />
+                </div>
                 <span class="namelastmsg">
                     <p id="names" style="display:none">{{ names[i]|title }}</p>
                     <h3 class="room-name">{{ rooms[i]|title }}</h3>

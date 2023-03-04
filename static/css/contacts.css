@@ -74,3 +74,32 @@ div[data-user-card-container] ~ :not(.active) {
     left: 0;
     top: 0;
 }
+
+#last-seen {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    gap: 4px;
+}
+
+.available {
+    position: relative;
+}
+
+.available::before {
+    content: attr(data-badge);
+    margin-left: 30px;
+    position: absolute;
+    border-radius: 50%;
+    left: 0;
+    background-color: #2A85FF;
+    padding: 5px;
+}
+
+.circle {
+    border-radius: 50%;
+    width: 4px;
+    height: 4px;
+    background-color: #2A85FF;
+    padding: 4px;
+}
