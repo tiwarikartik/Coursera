@@ -28,11 +28,18 @@
 }
 
 #profilepic {
-    width: 15px;
-    height: 15px;
-    padding: 15px;
+    width: 40px;
+    height: 40px;
     background-color: var(--foreground-color-white);
     border-radius: 50%;
+    padding: 2px;
+}
+
+#profilepic img {
+    width: inherit;
+    height: inherit;
+    margin: 0;
+    border-radius: inherit;
 }
 
 .message {

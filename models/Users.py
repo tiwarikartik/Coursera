@@ -23,8 +23,15 @@ class Users(UserMixin, db.Model):
     password = db.Column(db.String, nullable=False)
     email = db.Column(db.String(100), unique=True)
     active = db.Column(db.Boolean, default=False)
+    profilepic = db.Column(db.LargeBinary, default=None)
     chats = db.relationship("Duo", secondary=user_duo, backref="participants")
     messages = db.relationship("History", backref="sender")
+
+
+class img(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String)
+    img = db.Column(db.LargeBinary)
 
 
 class Duo(db.Model):

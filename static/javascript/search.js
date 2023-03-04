@@ -26,17 +26,13 @@ searchInput.addEventListener("input", (e) => {
                 header.textContent = user.username;
                 body.textContent = user.email;
 
-                listener = card.addEventListener(
-                    "click",
-                    () => {
-                        leaveRoom(room);
-                        socket.emit("room", {
-                            receiver: user.username,
-                            requestor: username,
-                        });
-                    },
-                    { once: true }
-                );
+                listener = card.addEventListener("click", () => {
+                    leaveRoom(room);
+                    socket.emit("room", {
+                        receiver: user.username,
+                        requestor: username,
+                    });
+                });
 
                 userCardContainer.append(card);
                 return {

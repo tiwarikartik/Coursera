@@ -18,6 +18,11 @@ document.querySelectorAll(".contact").forEach((elem) => {
             .classList.remove("invisible");
         document.querySelector("#username").innerHTML =
             elem.querySelector(".room-name").textContent;
+        document.querySelector(
+            "#profile > #profilepic"
+        ).innerHTML = `<img src=${
+            elem.querySelector("#profilepic > img").src
+        } />`;
 
         if (newRoom == room) {
             msg = `You are already in ${room} room.`;

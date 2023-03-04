@@ -27,6 +27,7 @@
 
 body {
     height: 100svh;
+    display: flex;
 }
 
 .search-wrapper {

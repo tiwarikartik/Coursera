@@ -1,7 +1,18 @@
 import os, json
 from time import localtime, strftime
 from datetime import datetime
-from flask import Flask, render_template, redirect, url_for, flash, Response
+from flask import (
+    Flask,
+    Blueprint,
+    render_template,
+    redirect,
+    url_for,
+    flash,
+    Response,
+    session,
+    request,
+)
+from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO, send, emit, join_room, leave_room, rooms
 from wtf_fields import *
@@ -26,11 +37,13 @@ app.config[
 ] = "postgresql://practicedb_j9l4_user:5BMCGCDq8PYDjKrt10E17HZsLf6MrWZy@dpg-cfag8hhgp3jsh6f4ost0-a.oregon-postgres.render.com/practicedb_j9l4"  # os.environ.get("DATABASE_URL")
 
 db = SQLAlchemy(app)
-from models.Users import Users, Duo, user_duo, History, Files
+from models.Users import Users, Duo, user_duo, History, Files, img
 
 # Initialize Flask-SocketIO
 socketio = SocketIO(app)
-ROOMS = []
+ROOMS = list()
+NAMES = list()
+LASTMESSAGE = list()
 
 # Configue flask Login
 login = LoginManager(app)
@@ -90,15 +103,12 @@ def chat():
         flash("Please login", "danger")
         return redirect(url_for("login"))
 
-    user = db.session.query(Users).filter_by(username=current_user.username).one()
-    names = [duo.name for duo in user.chats]
-    rooms = [name.split(current_user.username) for name in names]
+    NAMES = [duo.name for duo in current_user.chats]
+    rooms = [name.split(current_user.username) for name in NAMES]
     rooms = [i[0].split(" x ") if i[0] != "" else i[1].split(" x ") for i in rooms]
     ROOMS = [j[0] if j[0] != "" else j[1] for j in rooms]
 
-    LASTMESSAGE = []
-
-    for i in names:
+    for i in NAMES:
         duo = Duo.query.filter_by(name=i).first()
         lastMessage = (
             db.session.query(History, Files)
@@ -117,16 +127,20 @@ def chat():
             else:
                 LASTMESSAGE.append(f"{file.filetype} {file.size}")
         lastMessage = None
-    print(f"\n\n\n\n\n\n\n\n{LASTMESSAGE}\n\n\n\n\n\n\n\n")
 
     return render_template(
-        "chat.html",
+        "messages.html",
         username=current_user.username,
         length=len(ROOMS),
-        names=names,
+        names=NAMES,
         lastmessage=LASTMESSAGE,
-        rooms=ROOMS,  # , lastMsg=LASTMESSAGE
+        rooms=ROOMS,
     )
+
+
+@app.route("/profile", methods=["GET", "POST"])
+def getProfile():
+    return render_template("profile.html")
 
 
 @app.route("/logout", methods=["GET"])
@@ -136,9 +150,39 @@ def logout():
     return redirect(url_for("login"))
 
 
+@app.route("/upload/", methods=["GET", "POST"])
+def upload():
+    pic = request.files["pic"]
+    if not pic:
+        return "No Pic Uploaded", 400
+
+    filename = secure_filename(pic.filename)
+    mimetype = pic.mimetype
+
+    if mimetype != "image/png":
+        return "Images should be png", 400
+
+    user = Users.query.filter_by(id=current_user.id).update(dict(profilepic=pic.read()))
+    db.session.commit()
+
+    return f"{mimetype}, {filename}"
+
+
+@app.route("/profilepic/<username>", methods=["GET", "POST"])
+def getProfilePic(username):
+    image = db.session.query(Users.profilepic).filter_by(username=username).first()[0]
+    if image == None:
+        image = db.session.query(img.img).filter_by(id=1).first()
+    return Response(image, mimetype="image/png")
+
+
 @app.route("/api/<enteredUsername>", methods=["GET"])
 def get_users(enteredUsername):
-    users = Users.query.filter(Users.username.ilike(f"%{enteredUsername}%")).all()
+    users = (
+        db.session.query(Users.username, Users.email)
+        .filter(Users.username.ilike(f"%{enteredUsername}%"))
+        .all()
+    )
     arr = []
     for user in users:
         arr.append({"username": user.username, "email": user.email})
@@ -184,13 +228,12 @@ def createRoom(data):
 @socketio.on("message")
 def message(data):
     room = Duo.query.filter_by(name=data["room"]).first()
-    user = Users.query.filter_by(username=data["username"]).first()
     message = data["msg"]
     timestamp = strftime("%d %b %Y %I:%M %p", localtime())
 
     savemessage = History(
         message=message,
-        send_by=user.id,
+        send_by=current_user.id,
         sent_in=room.id,
         send_on=datetime.strptime(timestamp, "%d %b %Y %I:%M %p"),
     )
@@ -205,7 +248,7 @@ def message(data):
         "secret",
         {
             "message": message,
-            "sender": user.username,
+            "sender": current_user.username,
             "room": room.name.title(),
             "time": timestamp,
         },
@@ -265,12 +308,13 @@ def leave(data):
 @socketio.on("audio-data")
 def handle_audio_data(data):
     room = Duo.query.filter_by(name=data["room"]).first()
-    user = Users.query.filter_by(username=data["sender"]).first()
     filetype = data["fileType"]
     message = data["audio_data"]
     timestamp = strftime("%d %b %Y %I:%M %p", localtime())
 
-    entry = History(message=None, send_by=user.id, sent_in=room.id, send_on=timestamp)
+    entry = History(
+        message=None, send_by=current_user.id, sent_in=room.id, send_on=timestamp
+    )
     db.session.add(entry)
     db.session.commit()
 
@@ -293,7 +337,6 @@ def handle_audio_data(data):
 @socketio.on("file-sender")
 def sendFiles(data):
     room = Duo.query.filter_by(name=data["room"]).one()
-    user = Users.query.filter_by(username=data["user"]).one()
     filetype = data["type"]
     name = data["name"]
     file = data["file"]
@@ -301,7 +344,9 @@ def sendFiles(data):
     timestamp = strftime("%d %b %Y %I:%M %p", localtime())
     print(user.id, room.id, sep="\n\n", end="\n\n")
 
-    entry = History(message="", send_by=user.id, sent_in=room.id, send_on=timestamp)
+    entry = History(
+        message="", send_by=current_user.id, sent_in=room.id, send_on=timestamp
+    )
     db.session.add(entry)
     db.session.commit()
 

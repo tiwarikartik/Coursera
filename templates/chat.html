@@ -11,141 +11,59 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
         integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
         crossorigin="anonymous"></script>
-    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/helpers.js')}}" defer></script>
-    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/chat.js') }}" defer></script>
-    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/rooms.js')}}"defer></script>
-    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/search.js')}}" defer></script>
-    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/audio.js')}}" defer></script>
-    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/files.js')}}" defer></script>
+    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/helpers.js')}}"
+        defer></script>
+    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/chat.js') }}"
+        defer></script>
+    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/rooms.js')}}"
+        defer></script>
+    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/search.js')}}"
+        defer></script>
+    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/audio.js')}}"
+        defer></script>
+    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/files.js')}}"
+        defer></script>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
 </head>
+
 <body>
     <nav></nav>
-    <div id="main-section">
-        {# Room Selection #}
-        <nav id="sidebar">
-            <div class="search-wrapper">
-                <i>
-                    <lord-icon src="https://cdn.lordicon.com/rlizirgt.json" colors="primary:#b3c4d1" trigger="hover"/>
-                </i>
-                <input type="search" id="search" placeholder="Search Users" data-search>
-                </input>
-            </div>
-            <div data-user-card-container>
-                <div id="messages-title">Messages</div>
-                {% for i in range(0, length) %}
-                    <div class="contact">  
-                        <span>
-                            <div id="profilepic"></div>
-                        </span>
-                        <span class="namelastmsg">
-                            <p id="names" style="display:none">{{ names[i]|title }}</p>
-                            <h3 class="room-name">{{ rooms[i]|title }}</h3>
-                            <p class="latest-msg">{{ lastmessage[i] }}</p>
-                        </span>
-                        <p class="last-msg-time">04:44 PM</p>
+    <nav id="sidebar">
+        <div class="search-wrapper">
+            <i>
+                <lord-icon src="https://cdn.lordicon.com/rlizirgt.json" colors="primary:#b3c4d1" trigger="hover" />
+            </i>
+            <input type="search" id="search" placeholder="Search Users" data-search>
+            </input>
+        </div>
+        <div data-user-card-container>
+            <div id="messages-title">Messages</div>
+            {% for i in range(0, length) %}
+            <div class="contact">
+                    <div id="profilepic">
+                        <img src="http://127.0.0.1:5000/profilepic/{{ rooms[i] }}" />
                     </div>
-                    
-                {% endfor %}
+                <span class="namelastmsg">
+                    <p id="names" style="display:none">{{ names[i]|title }}</p>
+                    <h3 class="room-name">{{ rooms[i]|title }}</h3>
+                    <p class="latest-msg">{{ lastmessage[i] }}</p>
+                </span>
+                <p class="last-msg-time">04:44 PM</p>
             </div>
-        </nav>
-
-        {# Message Area #}
-        <div id="rightside-panel">
-            <div id="profile" class="invisible">
-                <div id="profilepic"></div>
-                <div class="profile-details">
-                    <h2 id="username">Kajal</h2>
-                    <p id="last-seen">24:08PM</p>
-                </div>
-            </div>
-            <div id="display-messages">
-            </div>
-            
-            {# Input Message #}
-            <div class="input-area invisible">
-                
-                <input type="text" id="user-message" placeholder="Type Messages here ...." autocomplete="off">
-                
-                <button type="button" id="send-message" class="btn">
-                    <img src="{{ url_for('static', filename='icons/send.svg') }}" />
-                </button>
-                
-                <button type="button" id="stop">
-
-                </button>
-                
-                <button type="button" id="record" class="btn">
-                    <img src="{{ url_for('static', filename='icons/record.svg') }}" />
-                </button>
-
-                <button type="button" id="image" class="btn">
-                    <img src="{{ url_for('static', filename='icons/image.svg') }}" />
-                </button>
-
-                <button type="button" id="file-btn" class="btn">
-                    <img src="{{ url_for('static', filename='icons/clip.svg') }}" />
-                </button>
-            </div>
+    
+            {% endfor %}
         </div>
+    </nav>
+    <div id="rightside-panel">
+        {% block content %}
+        {% endblock %}
     </div>
-
-    {# Chats Templates #}
-    <template id='chat'>
-        <div id="chat-container">
-            <p id="date"></p>
-            <p id="user"></p>
-            <div class="flex-row">
-                <div id="profilepic"></div>
-                <div class="flex-col">
-                    <p class="message"></p>
-                </div>
-            </div>
-            <p id="time"></p>
-        </div>
-    </template>
-
-    {# Audio Templates #}
-    <template data-audio-template>
-        <article id="container">
-            <p id="clipName"></p>
-            <audio id="audio" src="" controls></audio>
-            <button id="delete">Delete</button>
-        </article>
-    </template>
-
-    {# Search Cards #}
-    <template data-card-template>
-        <div class="contact">
-            <span>
-                <div id="profilepic"></div>
-            </span>
-            <span class="namelastmsg">
-                <h3 class="room-name"></h3>
-                <p class="latest-msg"></p>
-            </span>
-            <p class="last-msg-time">04:44 PM</p>
-        </div>
-    </template>
-
-    {# File Template #}
-    <template id="file-template">
-        <div class="attachment">
-            <div class="icons-and-details">
-                <lord-icon class="doc-icon" src="https://cdn.lordicon.com/frjgvxce.json" trigger="boomerang"></lord-icon>
-                <div id="doc-details">
-                    <div class="doc-title"></div>
-                    <div class="doc-size"></div>
-                </div>
-            </div>
-            <a class="doc-download"> <lord-icon src="https://cdn.lordicon.com/albqovim.json" trigger="hover"></lord-icon></a>
-        </div>
-    </template>
 
     {# Get Username #}
     <script type="text/javascript">
         const username = `{{ username }}`;
     </script>
 </body>
+
 </html>
