@@ -1,0 +1,223 @@
+.video-container {
+    position: relative;
+    width: 90%;
+    max-width: 1000px;
+    background-color: black;
+    justify-content: center;
+    margin-inline: auto;
+    border-radius: 10px;
+}
+
+.video-container.full-screen {
+    max-width: initial;
+    width: 100%;
+    max-height: 100vh;
+}
+
+video {
+    width: 100%;
+    border-radius: inherit;
+}
+
+.video-controls-container {
+    width: 100%;
+    border-radius: inherit;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: white;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 150ms ease-in-out;
+}
+
+.video-controls-container::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, .75), transparent);
+    border-radius: inherit;
+    width: 100%;
+    aspect-ratio: 6 / 1;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.video-container:hover .video-controls-container,
+.video-container:focus-within .video-controls-container .video-container.paused .video-controls-container {
+    opacity: 1;
+}
+
+.video-controls-container .controls {
+    width: 100%;
+    display: flex;
+    gap: .5rem;
+    padding: .25rem;
+    height: 24px;
+    width: 24px;
+    margin-inline: 0.5rem;
+    align-items: center;
+    justify-items: center;
+}
+
+.video-controls-container .controls button {
+    background: none;
+    border: none;
+    color: white;
+    height: inherit;
+    padding: 0;
+    font-size: 1.1rem;
+    cursor: pointer
+}
+
+.play-pause-btn {
+    position: absolute;
+    background: none;
+    border: none;
+    color: white;
+    top: 40%;
+    bottom: 40%;
+    left: 40%;
+    right: 40%;
+    z-index: 100;
+    cursor: pointer
+}
+
+.video-container.paused .play-pause-btn {
+    display: block;
+}
+
+.video-container:not(.paused) .play-pause-btn {
+    display: none;
+}
+
+.video-container:hover:not(.paused) .play-pause-btn {
+    display: block;
+}
+
+.full-screen-btn {
+    position: absolute;
+    right: .5rem;
+
+}
+
+.video-container.paused .pause-icon {
+    display: none;
+}
+
+.video-container:not(.paused) .play-icon {
+    display: none;
+}
+
+.video-container.full-screen .full-screen-entry {
+    display: none;
+}
+
+.video-container:not(.full-screen) .full-screen-exit {
+    display: none;
+}
+
+.mute-btn svg {
+    display: none;
+}
+
+.video-container[data-volume-level='high'] .volume-high-icon {
+    display: block;
+}
+
+.video-container[data-volume-level='low'] .volume-low-icon {
+    display: block;
+}
+
+.video-container[data-volume-level='mute'] .volume-mute-icon {
+    display: block;
+}
+
+.volume-container {
+    display: flex;
+    align-items: center;
+}
+
+.volume-slider {
+    width: 0;
+    transform: scaleX(0);
+    accent-color: purple;
+    transition: width 150ms ease-in-out, transform 150ms ease-in-out;
+    transform-origin: left;
+}
+
+.volume-container:hover .volume-slider,
+.volume-slider:focus-within {
+    width: 100px;
+    transform: scaleX(1);
+}
+
+.duration-container {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+}
+
+.timeline-container {
+    height: 7px;
+    margin-inline: .5rem;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+}
+
+.timeline {
+    background: rgba(255, 255, 255, 0.377);
+    height: 3px;
+    width: 100%;
+}
+
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 82%;
+    right: calc(100% - var(--preview-position) * 100%);
+    background: rgb(100, 100, 100);
+    display: none;
+}
+
+.timeline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 82%;
+    margin-left: .5rem;
+    margin-right: .5rem;
+    right: calc(100% - var(--progress-position) * 100%);
+    background: red;
+    z-index: 100;
+}
+
+.timeline .thumb-indicator {
+    --scale: 0;
+    position: absolute;
+    transform: translateX(-50%) scale(var(--scale));
+    height: 40%;
+    top: -8%;
+    left: calc((var(--progress-position) * 100%) - 0.5rem);
+    background-color: red;
+    border-radius: 50%;
+    transition: transform 150ms ease-in-out;
+    aspect-ratio: 1/1;
+}
+
+.timeline-container:hover .timeline::before {
+    display: block;
+}
+
+.timeline-container:hover .thumb-indicator {
+    --scale: 1;
+}
+
+.timeline-container:hover .timeline {
+    height: 100%;
+}

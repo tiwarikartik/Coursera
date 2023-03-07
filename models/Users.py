@@ -3,10 +3,6 @@ from flask_login import UserMixin
 from app import db
 from datetime import datetime
 
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin
-from app import db
-
 
 user_duo = db.Table(
     "user_duo",
@@ -26,12 +22,6 @@ class Users(UserMixin, db.Model):
     profilepic = db.Column(db.LargeBinary, default=None)
     chats = db.relationship("Duo", secondary=user_duo, backref="participants")
     messages = db.relationship("History", backref="sender")
-
-
-class img(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String)
-    img = db.Column(db.LargeBinary)
 
 
 class Duo(db.Model):
@@ -60,3 +50,9 @@ class Files(db.Model):
     filetype = db.Column(db.String, default=None)
     name = db.Column(db.String, default=None)
     size = db.Column(db.String, default=None)
+
+
+class img(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String)
+    img = db.Column(db.LargeBinary)

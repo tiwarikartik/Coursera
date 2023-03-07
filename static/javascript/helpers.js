@@ -82,7 +82,6 @@ function fileRenderer(data) {
     let file = data.type.split("/")[0];
 
     if (file == "image") {
-        console.log(data);
         let txtTemplate = document.querySelector("#chat");
         let txtContent = txtTemplate.content.cloneNode(true);
         let chatContainer = txtContent.querySelector("#chat-container");
@@ -99,9 +98,13 @@ function fileRenderer(data) {
         img.innerHTML = `<img class="img" src="${url}"></img>`;
         messages.append(txtContent);
 
-        console.log(messages.scrollHeight);
         messages.scrollTo(0, messages.scrollHeight);
     } else if (file == "video") {
+        let videoTemplate = document.querySelector("#video-template");
+        let videoContent = videoTemplate.content.cloneNode(true);
+        videoContent.querySelector("video").src = url;
+        messages.append(txtContent);
+        messages.scrollTo(0, messages.scrollHeight);
     } else {
         fileContent.querySelector(".doc-title").append(data.fileName);
         fileContent.querySelector(".doc-size").append(data.fileSize);

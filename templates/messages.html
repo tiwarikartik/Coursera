@@ -95,4 +95,72 @@
                 trigger="hover"></lord-icon></a>
     </div>
 </template> 
+
+{# Video Template #}
+<template id="video-template">
+    <div class="video-container paused" data-volume-level="high">
+        <button class="play-pause-btn">
+            <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" height="40" viewBox="0 96 960 960" width="40">
+                <path fill="currentColor"
+                    d="M383 856q-32 20-64.5 2.5T286 803V349q0-38 32.5-55.5T383 296l356 227q29 19 29 53.5T739 629L383 856Z" />
+            </svg>
+            <svg class="pause-icon" xmlns="http://www.w3.org/2000/svg" height="40" viewBox="0 96 960 960" width="40">
+                <path fill="currentColor"
+                    d="M645 917q-51.975 0-88.987-37.013Q519 842.975 519 791V361q0-51.975 37.013-88.987Q593.025 235 645 235h50q51.975 0 88.987 37.013Q821 309.025 821 361v430q0 51.975-37.013 88.987Q746.975 917 695 917h-50Zm-380 0q-51.975 0-88.988-37.013Q139 842.975 139 791V361q0-51.975 37.012-88.987Q213.025 235 265 235h50q51.975 0 88.987 37.013Q441 309.025 441 361v430q0 51.975-37.013 88.987Q366.975 917 315 917h-50Z" />
+            </svg>
+        </button>
+        <div class="video-controls-container">
+            <div class="timeline-container">
+                <div class="timeline">
+                    <div class="preview-img"></div>
+                    <div class="thumb-indicator"></div>
+                </div>
+            </div>
+            <div class="controls">
+                <div class="duration-container">
+                    <div class="current-time">0:00</div>
+                    /
+                    <div class="total-time">10:00</div>
+                </div>
+                <div class="volume-container">
+                    <button class="mute-btn">
+                        <svg class="volume-high-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960"
+                            width="24">
+                            <path fill="currentColor"
+                                d="M651 921q-23 10-44-6t-21-42q0-14 7.5-24.5T614 833q77-33 124.5-103T786 575q0-85-47.5-155T614 317q-13-5-20.5-16t-7.5-25q0-26 21-41.5t44-5.5q104 44 167 137t63 209q0 116-63 209T651 921ZM142 730q-26 0-44.5-18.5T79 667V485q0-26 18.5-44.5T142 422h117l140-140q30-30 68.5-13.5T506 327v498q0 42-38.5 58.5T399 870L259 730H142Zm444 18V402q52 25 83.5 72T701 576q0 55-31.5 101T586 748Z" />
+                        </svg>
+
+                        <svg class="volume-low-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960"
+                            width="24">
+                            <path fill="currentColor"
+                                d="M222 730q-26 0-44.5-18.5T159 667V485q0-26 18.5-44.5T222 422h117l140-140q30-30 68.5-13.5T586 327v498q0 42-38.5 58.5T479 870L339 730H222Zm444 18V402q52 25 83.5 72T781 576q0 55-31.5 101T666 748Z" />
+                        </svg>
+
+                        <svg class="volume-mute-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960"
+                            width="24">
+                            <path fill="currentColor"
+                                d="M309 730q-26 0-44.5-18.5T246 667V485q0-26 18.5-44.5T309 422h117l141-140q30-30 68.5-13.5T674 327v498q0 42-38.5 58.5T567 870L426 730H309Z" />
+                        </svg>
+                    </button>
+                    <input class="volume-slider" type="range" min="0" max="1" step="any" value="1" />
+                </div>
+                <button class="full-screen-btn">
+                    <svg class="full-screen-entry" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960"
+                        width="24">
+                        <path fill="currentColor"
+                            d="M225 894q-26 0-44.5-18.5T162 831V696q0-26 18.5-44.5T225 633q26 0 44.5 18.5T288 696v72h72q26 0 44.5 18.5T423 831q0 26-18.5 44.5T360 894H225Zm0-375q-26 0-44.5-18.5T162 456V321q0-26 18.5-44.5T225 258h135q26 0 44.5 18.5T423 321q0 26-18.5 44.5T360 384h-72v72q0 26-18.5 44.5T225 519Zm375 375q-26 0-44.5-18.5T537 831q0-26 18.5-44.5T600 768h72v-72q0-26 18.5-44.5T735 633q26 0 44.5 18.5T798 696v135q0 26-18.5 44.5T735 894H600Zm135-375q-26 0-44.5-18.5T672 456v-72h-72q-26 0-44.5-18.5T537 321q0-26 18.5-44.5T600 258h135q26 0 44.5 18.5T798 321v135q0 26-18.5 44.5T735 519Z" />
+                    </svg>
+                    <svg class="full-screen-exit" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960"
+                        width="24">
+                        <path fill="currentColor"
+                            d="M360 894q-26 0-44.5-18.5T297 831v-72h-72q-26 0-44.5-18.5T162 696q0-26 18.5-44.5T225 633h135q26 0 44.5 18.5T423 696v135q0 26-18.5 44.5T360 894ZM225 519q-26 0-44.5-18.5T162 456q0-26 18.5-44.5T225 393h72v-72q0-26 18.5-44.5T360 258q26 0 44.5 18.5T423 321v135q0 26-18.5 44.5T360 519H225Zm375 375q-26 0-44.5-18.5T537 831V696q0-26 18.5-44.5T600 633h135q26 0 44.5 18.5T798 696q0 26-18.5 44.5T735 759h-72v72q0 26-18.5 44.5T600 894Zm0-375q-26 0-44.5-18.5T537 456V321q0-26 18.5-44.5T600 258q26 0 44.5 18.5T663 321v72h72q26 0 44.5 18.5T798 456q0 26-18.5 44.5T735 519H600Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <video></video>
+    </div>
+    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='javascript/video.js')}}"
+        defer></script>
+</template>
 {% endblock %}

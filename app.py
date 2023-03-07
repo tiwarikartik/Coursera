@@ -353,13 +353,13 @@ def handle_audio_data(data):
 
 @socketio.on("file-sender")
 def sendFiles(data):
+    print("data", data, end="\n\n\n")
     room = Duo.query.filter_by(name=data["room"]).one()
     filetype = data["type"]
     name = data["name"]
-    file = data["file"]
+    file = data["blob"]
     size = data["size"]
     timestamp = strftime("%d %b %Y %I:%M %p", localtime())
-    print(user.id, room.id, sep="\n\n", end="\n\n")
 
     entry = History(
         message="", send_by=current_user.id, sent_in=room.id, send_on=timestamp
@@ -367,6 +367,8 @@ def sendFiles(data):
     db.session.add(entry)
     db.session.commit()
 
+    print("FILES ENTERED", end="\n\n\n\n\n\n\n\n")
+    print(file)
     savefile = Files(
         name=name, binary=file, messageid=entry.id, filetype=filetype, size=size
     )
@@ -377,7 +379,7 @@ def sendFiles(data):
         {
             "fileName": name,
             "fileSize": size,
-            "sender": user.username,
+            "sender": current_user.username,
             "id": entry.id,
             "type": filetype,
             "time": entry.send_on.strftime("%d %b %Y %I:%M %p"),

@@ -4,6 +4,7 @@
 @import './contacts.css';
 @import "./messages.css";
 @import "./profile.css";
+@import "./video.css";
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 * {

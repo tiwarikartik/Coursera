@@ -10,6 +10,7 @@ let sizeOf = function (bytes) {
 
 let attachemntBtn = document.querySelector("#file-btn");
 socket.on("file-receiver", (json) => {
+    console.log(json);
     messages.innerHTML = "";
     socket.emit("history", {
         user: username,
@@ -34,31 +35,40 @@ attachemntBtn.addEventListener("click", () => {
         </form></section>`;
 });
 
-attachemntBtn.addEventListener(
-    "click",
-    () => {
-        const form = document.querySelector("#file-upload");
-        let fileInput = document.querySelector("#file-input");
+attachemntBtn.addEventListener("click", () => {
+    const form = document.querySelector("#file-upload");
+    let fileInput = document.querySelector("#file-input");
 
-        form.addEventListener("click", () => {
-            fileInput.click();
-        });
+    form.addEventListener("click", () => {
+        fileInput.click();
+    });
+    console.log(room);
+
+    fileInput.addEventListener("change", (e) => {
         console.log(room);
-
-        fileInput.addEventListener("change", (e) => {
-            let file = e.target.files[0];
-            console.log(file);
-
-            socket.emit("file-sender", {
-                user: username,
-                room: room.toLowerCase(),
-                lastModified: file.lastModified,
-                type: file.type,
-                name: file.name,
-                size: sizeOf(file.size),
-                file: file,
+        let file = e.target.files[0];
+        let json = file
+            .arrayBuffer()
+            .then((buffer) => {
+                let arr = new Uint8Array(buffer);
+                return arr;
+            })
+            .then((arr) => {
+                data = {
+                    user: username,
+                    room: room.toLowerCase(),
+                    lastModified: file.lastModified,
+                    type: file.type,
+                    name: file.name,
+                    size: sizeOf(file.size),
+                    blob: arr,
+                };
+                return data;
+            })
+            .then((data) => {
+                console.log(socket);
+                socket.emit("file-sender", data);
             });
-        });
-    },
-    { once: true }
-);
+        console.log(json);
+    });
+});
