@@ -25,7 +25,8 @@
 
 form {
     padding: 2rem;
-    border: 1px solid black;
+    box-shadow: rgba(60, 142, 248, 0.35) 0px 19px 38px,
+        rgba(0, 0, 0, 0.22) 0px 15px 12px;
     border-radius: 20px;
 }
 
@@ -44,7 +45,7 @@ form {
     display: flex;
     min-width: 300px;
     flex-direction: column;
-    margin: 0.8rem;
+    margin: 1rem;
 }
 
 .input-label {
@@ -81,7 +82,7 @@ form {
 
 .input:focus {
     border: none;
-    box-shadow: 0px 1.5px 0px 0px #72e985;
+    box-shadow: 0px 0.1rem 0px 0px #3c8cf8;
     outline: none;
 }
 
@@ -95,44 +96,16 @@ form {
 }
 
 #submit_button {
-    min-width: 300px;
-    display: inline-block;
-    border-radius: 7px;
     margin-top: 20px;
+    width: 100%;
+    border-radius: 10px;
     border: none;
-    background: #1875ff;
+    background: #3c8cf8;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
     color: white;
     font-family: inherit;
     text-align: center;
-    font-size: 13px;
-    box-shadow: 0px 14px 56px -11px #1875ff;
-    width: 10em;
-    padding: 1em;
-    transition: all 0.4s;
+    font-size: 1.1rem;
+    height: 3rem;
     cursor: pointer;
-}
-
-#submit_button span {
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    transition: 0.4s;
-}
-
-#submit_button span:after {
-    content: "gging in";
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    right: -20px;
-    transition: 0.7s;
-}
-
-#submit_button:hover span {
-    padding-right: 3.55em;
-}
-
-#submit_button:hover span:after {
-    opacity: 4;
-    right: 0;
 }

@@ -119,9 +119,12 @@ input:focus {
         height: 5rem;
     }
 
+    body {
+        margin-bottom: 5rem;
+    }
+
     #sidebar {
         width: 100%;
-        margin-bottom: 5rem;
     }
 
     #rightside-panel {
