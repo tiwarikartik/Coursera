@@ -351,6 +351,11 @@ def handle_audio_data(data):
     )
 
 
+@socketio.on("video")
+def gotVideo(data):
+    print(data)
+
+
 @socketio.on("file-sender")
 def sendFiles(data):
     print("data", data, end="\n\n\n")

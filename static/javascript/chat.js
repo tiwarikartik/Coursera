@@ -3,7 +3,7 @@ let messages = document.querySelector("#display-messages");
 let room;
 
 socket.on("connect", () => {
-    console.log(socket);
+    console.log("Connected");
 });
 
 socket.on("disconnect", () => {

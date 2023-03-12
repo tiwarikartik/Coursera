@@ -3,18 +3,19 @@
 {% block title %} Registration {% endblock %} 
 {% block content%}
 
-    <h1>Get Started</h1>
+<div class="form">
+    <h1 class="form-title">Get Started</h1>
 
-    <form action="{{ url_for('index') }}" , method="POST">
+    <form action="{{ url_for('index') }}" method="POST">
 
-        {{ displayField(form.username, 'Username', autocomplete='off', autofocus=true) }}
-        {{ displayField(form.password, 'Password') }}
-        {{ displayField(form.confirm_password, 'Retype Password') }}
-        {{ displayField(form.email, "Email Address")}}
-        
+        {{ displayField("username", "Username", form.username, 'JohnDoe', autocomplete='off', autofocus=true) }}
+        {{ displayField("password", "Password", form.password, '3OpU8#u4ihiyL1EGAsu2') }}
+        {{ displayField("password", "Retype Password",form.confirm_password, '3OpU8#u4ihiyL1EGAsu2') }}
+        {{ displayField("email", "Email Address", form.email, "johndoe@gmail.com")}}
+
         <div>{{ form.submit_button }}</div>
-        
+
         {{ form.csrf_token }}
     </form>
-
+</div>
 {% endblock %}

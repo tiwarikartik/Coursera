@@ -1,25 +1,26 @@
+@import "./sidebar.css";
 @import "./files.css";
 @import "./attachment.css";
 @import "./inputarea.css";
-@import './contacts.css';
+@import "./contacts.css";
 @import "./messages.css";
 @import "./profile.css";
 @import "./video.css";
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
 
 * {
     margin: 0;
     padding: 0;
-    font-family: 'Quicksand','Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Quicksand", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 :root {
-    --background-color-white: #EBF4FB;
+    --background-color-white: #ebf4fb;
     --box-shadow-color-white: #ebf0fbce;
-    --foreground-color-white: #181F2E;
-    --highlight-color-white: #FF5252;
+    --foreground-color-white: #181f2e;
+    --highlight-color-white: #ff5252;
     --box-shadow-orange-color-white: #ff5252ce;
-    --border-color-white: #B3C4D1;
+    --border-color-white: #b3c4d1;
 }
 
 .invisible {
@@ -32,17 +33,18 @@ body {
 }
 
 .search-wrapper {
-    display:flex;
+    display: flex;
     flex-direction: row;
-    gap: .25rem;
+    gap: 0.25rem;
     padding: 0.5rem;
-    background-color: white;    
+    background-color: white;
     border: rgb(238, 240, 242) 4px solid;
     border-radius: 50px;
 }
 
-input, input:focus {
-    outline: none
+input,
+input:focus {
+    outline: none;
 }
 
 .search-wrapper input {
@@ -54,27 +56,27 @@ input, input:focus {
 .user-cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: .25rem;
-    margin-top:1rem;
+    gap: 0.25rem;
+    margin-top: 1rem;
 }
 
 .card {
     border: 1px solid black;
     background-color: beige;
-    padding: .5rem;
+    padding: 0.5rem;
 }
 
-.card > .header{
-    margin-bottom: .25rem;
+.card > .header {
+    margin-bottom: 0.25rem;
 }
 
 .card > .body {
-    font-size: .8rem;
-    color: #777
+    font-size: 0.8rem;
+    color: #777;
 }
 
 .hide {
-    display:none;
+    display: none;
 }
 
 #main-section {
@@ -94,7 +96,7 @@ input, input:focus {
 
 #rightside-panel {
     width: 100%;
-    background: url('../images/background-white-5600.jpg');
+    background: url("../images/background-white-5600.jpg");
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -107,4 +109,22 @@ input, input:focus {
     width: 95%;
     overflow-y: auto;
     height: calc(100vh - 210px);
+}
+
+@media (max-width: 600px) {
+    .navbar {
+        position: fixed;
+        bottom: 0;
+        width: 100vw;
+        height: 5rem;
+    }
+
+    #sidebar {
+        width: 100%;
+        margin-bottom: 5rem;
+    }
+
+    #rightside-panel {
+        display: none;
+    }
 }

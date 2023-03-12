@@ -28,14 +28,55 @@
 </head>
 
 <body>
-    <nav></nav>
+<nav class="navbar">
+    <ul class="navbar-nav">
+        <li class="logo">
+            <a href="#" class="nav-link">
+                <span class="link-text logo-text">GupSup</span>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                    <path xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                        d="M5.15 17.7q-.45-.45-.45-1.1 0-.65.45-1.1L8.625 12 5.15 8.5q-.45-.45-.45-1.1 0-.65.45-1.1.45-.45 1.1-.45.65 0 1.1.45l4.6 4.6q.25.25.35.525.1.275.1.575 0 .3-.1.575-.1.275-.35.525l-4.6 4.6q-.45.45-1.1.45-.65 0-1.1-.45Zm6.9 0q-.45-.45-.45-1.1 0-.65.45-1.1l3.5-3.5-3.5-3.5q-.45-.45-.45-1.1 0-.65.45-1.1.45-.45 1.1-.45.65 0 1.1.45l4.6 4.6q.25.25.35.525.1.275.1.575 0 .3-.1.575-.1.275-.35.525l-4.6 4.6q-.45.45-1.1.45-.65 0-1.1-.45Z" />
+                </svg>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="http://127.0.0.1:5000/profile" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                    <path xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                        d="M12 11.575q-2.025 0-3.438-1.413Q7.15 8.75 7.15 6.725T8.562 3.3Q9.975 1.9 12 1.9q2.025 0 3.438 1.4 1.412 1.4 1.412 3.425t-1.412 3.437Q14.025 11.575 12 11.575Zm-5.7 9.7q-1.325 0-2.238-.913-.912-.912-.912-2.237v-.55q0-1.075.563-1.988.562-.912 1.512-1.387 1.625-.8 3.325-1.213 1.7-.412 3.45-.412 1.8 0 3.5.4t3.275 1.2q.95.475 1.513 1.375.562.9.562 2.025v.55q0 1.325-.912 2.237-.913.913-2.238.913Z" />
+                </svg>
+                <span class="link-text">Profile</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="http://127.0.0.1:5000/chat" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                    <path xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                        d="M6.3 21.85q-1.3 0-2.225-.925T3.15 18.7v-8.55q0-.75.35-1.425t.925-1.1l5.675-4.25q.425-.325.912-.488.488-.162.988-.162t.988.162q.487.163.912.488l5.675 4.25q.6.425.938 1.1.337.675.337 1.425v8.55q0 1.3-.925 2.225t-2.225.925h-3.5V13.8H9.8v8.05Z" />
+                </svg>
+                <span class="link-text">Home</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="http://127.0.0.1:5000/logout" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                    <path xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                        d="M14.925 17.075q-.45-.475-.45-1.112 0-.638.45-1.088l1.3-1.3h-6.1q-.65 0-1.113-.463Q8.55 12.65 8.55 12q0-.65.462-1.113.463-.462 1.113-.462h6.1L14.9 9.1q-.45-.45-.437-1.088.012-.637.462-1.087.45-.45 1.1-.45.65 0 1.1.45L21.1 10.9q.225.225.338.512.112.288.112.588t-.112.587q-.113.288-.338.513l-4 4q-.475.475-1.1.45-.625-.025-1.075-.475ZM4.95 21.85q-1.325 0-2.238-.912Q1.8 20.025 1.8 18.7V5.3q0-1.325.912-2.238.913-.912 2.238-.912h5.675q.65 0 1.113.462.462.463.462 1.113 0 .65-.462 1.113-.463.462-1.113.462H4.95v13.4h5.675q.65 0 1.113.463.462.462.462 1.112 0 .65-.462 1.113-.463.462-1.113.462Z" />
+                </svg>
+                <span class="link-text">Logout</span>
+            </a>
+        </li>
+    </ul>
+</nav>
     <nav id="sidebar">
         <div class="search-wrapper">
             <i>
                 <lord-icon src="https://cdn.lordicon.com/rlizirgt.json" colors="primary:#b3c4d1" trigger="hover" />
             </i>
-            <input type="search" id="search" placeholder="Search Users" data-search>
-            </input>
+            <input type="search" id="search" placeholder="Search Users" data-search />
         </div>
         <div data-user-card-container>
             <div id="messages-title">Messages</div>

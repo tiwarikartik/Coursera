@@ -47,8 +47,7 @@ attachemntBtn.addEventListener("click", () => {
     fileInput.addEventListener("change", (e) => {
         console.log(room);
         let file = e.target.files[0];
-        let json = file
-            .arrayBuffer()
+        file.arrayBuffer()
             .then((buffer) => {
                 let arr = new Uint8Array(buffer);
                 return arr;
@@ -66,9 +65,7 @@ attachemntBtn.addEventListener("click", () => {
                 return data;
             })
             .then((data) => {
-                console.log(socket);
                 socket.emit("file-sender", data);
             });
-        console.log(json);
     });
 });
