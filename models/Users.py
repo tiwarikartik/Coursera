@@ -15,6 +15,8 @@ class Users(UserMixin, db.Model):
     # User Model
 
     id = db.Column(db.Integer, primary_key=True)
+    screen_name = db.Column(db.String)
+    about = db.Column(db.String)
     username = db.Column(db.String(25), unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
     email = db.Column(db.String(100), unique=True)

@@ -1,0 +1,50 @@
+@import "./sidebar.css";
+@import "./forms.css";
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Montserrat");
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Quicksand, sans-serif;
+
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    min-height: 100vh;
+    margin: 0;
+}
+
+h3 {
+    margin: 10px 0;
+}
+
+h6 {
+    margin: 5px 0;
+    text-transform: uppercase;
+}
+
+p {
+    font-size: 14px;
+    line-height: 21px;
+}
+
+.card-container {
+    border-radius: 5px;
+    color: #141418;
+    padding-top: 40px;
+    position: relative;
+    width: 350px;
+    height: 100vh;
+    max-width: 100%;
+    text-align: center;
+}
+
+.card-container .round {
+    border: 1px solid rgb(238, 240, 242);
+    border-radius: 50%;
+    padding: 7px;
+}

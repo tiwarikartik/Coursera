@@ -1,5 +1,7 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField
+from werkzeug.utils import secure_filename
 from wtforms.validators import InputRequired, Length, EqualTo, Email, ValidationError
 from passlib.hash import pbkdf2_sha512
 
@@ -82,3 +84,40 @@ class LoginForm(FlaskForm):
     )
     submit_button = SubmitField("Login")
     register_button = SubmitField("Register")
+
+
+class ProfileForm(FlaskForm):
+    # Login Form
+
+    username = StringField(
+        "username_label",
+        validators=[
+            InputRequired(message="Username required"),
+        ],
+    )
+    name = StringField(
+        "name_label",
+        validators=[InputRequired(message="Name required")],
+    )
+    email = StringField(
+        "email_address_label",
+        validators=[
+            InputRequired(message="Email ID required"),
+            Email(message="This field requires a valid email address"),
+        ],
+    )
+    bio = StringField(
+        "bio_label",
+        validators=[
+            InputRequired(message="Bio field is Required"),
+            Length(
+                min=20, max=2500, message="Bio must be between 20 and 2000 characters"
+            ),
+        ],
+    )
+    pic = FileField(
+        "image",
+        validators=[FileRequired(), FileAllowed(["jpg", "png"], "Images only!")],
+    )
+
+    submit_button = SubmitField("Submit")

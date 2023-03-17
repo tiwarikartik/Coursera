@@ -6,7 +6,7 @@
 <div class="form">
     <h1 class="form-title">Get Started</h1>
 
-    <form action="{{ url_for('index') }}" method="POST">
+    <form id="form" action="{{ url_for('index') }}" method="POST">
 
         {{ displayField("username", "Username", form.username, 'JohnDoe', autocomplete='off', autofocus=true) }}
         {{ displayField("password", "Password", form.password, '3OpU8#u4ihiyL1EGAsu2') }}

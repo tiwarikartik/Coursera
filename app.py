@@ -34,7 +34,7 @@ app.config["SQLALCHEMY_ECHO"] = True
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = "postgresql://practicedb_j9l4_user:5BMCGCDq8PYDjKrt10E17HZsLf6MrWZy@dpg-cfag8hhgp3jsh6f4ost0-a.oregon-postgres.render.com/practicedb_j9l4"  # os.environ.get("DATABASE_URL")
+] = "postgresql://chatapp_gamm_user:veUjJBD1aGAfgVFRHMHEhn0Bp0g2FLCv@dpg-cf415q6n6mps0qn9faug-a.oregon-postgres.render.com/chatapp_gamm"  # os.environ.get("DATABASE_URL")
 
 db = SQLAlchemy(app)
 from models.Users import Users, Duo, user_duo, History, Files, img
@@ -92,7 +92,7 @@ def login():
         user_object = Users.query.filter_by(username=login_form.username.data).first()
         login_user(user_object)
 
-        return redirect(url_for("chat"))
+        return redirect(url_for("profile"))
 
     return render_template("login.html", form=login_form)
 
@@ -144,8 +144,21 @@ def chat():
 
 
 @app.route("/profile", methods=["GET", "POST"])
+@login_required
 def getProfile():
-    return render_template("profile.html")
+    form = ProfileForm()
+    if form.validate_on_submit():
+        Users.query.filter_by(id=current_user.id).update(
+            dict(
+                profilepic=form.pic.data.read(),
+                screen_name=form.name.data,
+                email=form.name.data,
+                about=form.bio.data,
+            )
+        )
+        db.session.commit()
+        return url_for("chat")
+    return render_template("profile.html", form=form)
 
 
 @app.route("/logout", methods=["GET"])

@@ -7,7 +7,7 @@
     <h2 class="form-title">Login Now!</h2>
     <p class="form-desc">Enter your username/password to start RChat</p>
 
-    <form action="{{ url_for('login') }}" method="POST">
+    <form id="form" action="{{ url_for('login') }}" method="POST">
         {{ displayField("username", "Username", form.username, 'kartik@gmail.com', autocomplete='off', autofocus=true) }}
         {{ displayField("password", "Password", form.password, 'JHid8HU*NS&') }}
         <div>{{ form.submit_button }}</div>
