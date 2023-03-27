@@ -9,11 +9,11 @@
 
 <body>
     {% include 'sidebar.html' %}
-    {% if current_user.profilepic == None %}
-        {% include 'editprofile.html' %}
+    {% if current_user.screen_name == None %}
+        {% include "editprofile.html" %}
     {% else %}
         {% include 'showprofile.html' %}
-        {% include 'editprofile.html'%}
+        {% include "editprofile.html" %}
     {% endif %}
 </body>
 

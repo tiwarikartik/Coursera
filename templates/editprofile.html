@@ -1,9 +1,11 @@
 {% from 'form_helper.html' import displayField%}
-<form action="http://127.0.0.1:5000/profile" enctype="multipart/form-data" method="POST">
-    {{ current_user.bio}}
-    {{ displayField("name", "Name", form.name, "John Doe") }}
-    {{ displayField("email", "Email Address", form.email, "johndoe@gmail.com") }}
-    {{ displayField("bio", "About you", form.bio, "There’s a fine line between the numerator and the denominator.") }}
-    {{ displayField("pic", "Profile Picture", form.pic, hidden=True, class="input-file") }}
-    {{ form.submit_button}}
-</form>
+<div class="card-container">
+    <form id="form" action="http://127.0.0.1:5000/profile" enctype="multipart/form-data" method="POST">
+        {{ current_user.bio }}
+        {{ displayField("name", "Name", form.name, "John Doe") }}
+        {{ displayField("email", "Email Address", form.email, "johndoe@gmail.com") }}
+        {{ displayField("bio", "About you", form.bio, "There’s a fine line between the numerator and the denominator.") }}
+        {{ displayField("pic", "Profile Picture", form.pic, hidden=True, class="input-file") }}
+        {{ form.submit_button }}
+    </form>
+</div>

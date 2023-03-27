@@ -92,7 +92,7 @@ def login():
         user_object = Users.query.filter_by(username=login_form.username.data).first()
         login_user(user_object)
 
-        return redirect(url_for("profile"))
+        return redirect(url_for("chat"))
 
     return render_template("login.html", form=login_form)
 
@@ -147,17 +147,17 @@ def chat():
 @login_required
 def getProfile():
     form = ProfileForm()
-    if form.validate_on_submit():
-        Users.query.filter_by(id=current_user.id).update(
+    if request.method == "POST":
+        db.session.query(Users).filter_by(id=current_user.id).update(
             dict(
-                profilepic=form.pic.data.read(),
                 screen_name=form.name.data,
-                email=form.name.data,
+                profilepic=form.pic.data.read(),
                 about=form.bio.data,
+                email=form.email.data,
             )
         )
         db.session.commit()
-        return url_for("chat")
+        return redirect(url_for("profile"))
     return render_template("profile.html", form=form)
 
 

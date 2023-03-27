@@ -92,6 +92,9 @@ function fileRenderer(data) {
         }
 
         txtContent.querySelector("#user").append(data.sender);
+        txtContent.querySelector(
+            "#profilepic > img"
+        ).src = `http://127.0.0.1:5000/profilepic/${data.sender}`;
         txtContent.querySelector("#time").append(time);
         txtContent.querySelector(".message").remove();
         img.classList.add("img-col");
